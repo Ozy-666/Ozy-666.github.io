@@ -3,37 +3,364 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Ozy-666 | Edge Network & Security Infrastructure</title>
+    <title>Ozy-666 | Low-Latency Systems & Network Architecture</title>
     <style>
-        body { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif; line-height: 1.6; color: #e1e4e8; background-color: #0d1117; max-width: 800px; margin: 40px auto; padding: 0 20px; }
-        h1 { color: #c9d1d9; border-bottom: 1px solid #21262d; padding-bottom: 10px; }
-        h2 { color: #58a6ff; margin-top: 30px; }
-        a { color: #58a6ff; text-decoration: none; }
-        a:hover { text-decoration: underline; }
-        .project-card { background: #161b22; border: 1px solid #30363d; border-radius: 6px; padding: 15px; margin-bottom: 15px; }
+        :root {
+            --bg-color: #0d1117;
+            --card-bg: #161b22;
+            --border-color: #30363d;
+            --border-hover: #58a6ff;
+            --text-primary: #c9d1d9;
+            --text-muted: #8b949e;
+            --accent-blue: #58a6ff;
+            --accent-green: #3fb950;
+            --accent-grey: #484f58;
+            --font-sans: -apple-system, BlinkMacSystemFont, "Segoe UI", Helvetica, Arial, sans-serif, "Apple Color Emoji", "Segoe UI Emoji";
+            --font-mono: ui-monospace, SFMono-Regular, "SF Mono", Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace;
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            background-color: var(--bg-color);
+            color: var(--text-primary);
+            font-family: var(--font-sans);
+            line-height: 1.6;
+            padding: 2rem 1rem;
+        }
+
+        .container {
+            max-width: 800px;
+            margin: 0 auto;
+        }
+
+        /* Header section */
+        header {
+            margin-bottom: 3rem;
+            border-bottom: 1px solid var(--border-color);
+            padding-bottom: 2rem;
+        }
+
+        .terminal-user {
+            font-family: var(--font-mono);
+            color: var(--accent-blue);
+            font-size: 1.1rem;
+            margin-bottom: 0.5rem;
+        }
+
+        h1 {
+            font-size: 2.2rem;
+            font-weight: 800;
+            letter-spacing: -0.05em;
+            margin-bottom: 0.5rem;
+            color: #ffffff;
+        }
+
+        .subtitle {
+            color: var(--text-muted);
+            font-size: 1.1rem;
+            max-width: 600px;
+        }
+
+        /* Section styles */
+        section {
+            margin-bottom: 3rem;
+        }
+
+        h2 {
+            font-family: var(--font-mono);
+            font-size: 1rem;
+            color: var(--text-muted);
+            text-transform: uppercase;
+            letter-spacing: 0.1em;
+            margin-bottom: 1.5rem;
+            display: flex;
+            align-items: center;
+        }
+
+        h2::after {
+            content: "";
+            flex-grow: 1;
+            height: 1px;
+            background-color: var(--border-color);
+            margin-left: 1rem;
+        }
+
+        /* Showcase Card */
+        .showcase-card {
+            background-color: var(--card-bg);
+            border: 1px solid var(--border-color);
+            border-radius: 6px;
+            padding: 1.5rem;
+            transition: border-color 0.2s, transform 0.2s;
+            text-decoration: none;
+            display: block;
+            margin-bottom: 2.5rem;
+        }
+
+        .showcase-card:hover {
+            border-color: var(--accent-green);
+            transform: translateY(-2px);
+        }
+
+        .showcase-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 0.75rem;
+        }
+
+        .showcase-title {
+            font-size: 1.3rem;
+            font-weight: 700;
+            color: #ffffff;
+            font-family: var(--font-mono);
+        }
+
+        .badge-live {
+            background-color: rgba(63, 185, 80, 0.15);
+            color: var(--accent-green);
+            font-family: var(--font-mono);
+            font-size: 0.75rem;
+            padding: 0.2rem 0.6rem;
+            border-radius: 20px;
+            border: 1px solid rgba(63, 185, 80, 0.3);
+            text-transform: uppercase;
+            font-weight: 600;
+            letter-spacing: 0.05em;
+        }
+
+        .showcase-desc {
+            color: var(--text-muted);
+            margin-bottom: 1rem;
+            font-size: 0.95rem;
+        }
+
+        .tech-pills {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 0.5rem;
+        }
+
+        .pill {
+            background-color: rgba(88, 166, 255, 0.1);
+            color: var(--accent-blue);
+            font-family: var(--font-mono);
+            font-size: 0.75rem;
+            padding: 0.1rem 0.5rem;
+            border-radius: 4px;
+            border: 1px solid rgba(88, 166, 255, 0.2);
+        }
+
+        /* Project Grid */
+        .project-grid {
+            display: grid;
+            grid-template-columns: 1fr;
+            gap: 1rem;
+        }
+
+        @media (min-width: 600px) {
+            .project-grid {
+                grid-template-columns: 1fr 1fr;
+            }
+        }
+
+        .project-card {
+            background-color: var(--card-bg);
+            border: 1px solid var(--border-color);
+            border-radius: 6px;
+            padding: 1.25rem;
+            text-decoration: none;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            transition: border-color 0.2s, transform 0.2s;
+        }
+
+        .project-card:hover {
+            border-color: var(--border-hover);
+            transform: translateY(-2px);
+        }
+
+        .project-name {
+            font-size: 1.1rem;
+            font-weight: 700;
+            color: #ffffff;
+            font-family: var(--font-mono);
+            margin-bottom: 0.5rem;
+        }
+
+        .project-desc {
+            color: var(--text-muted);
+            font-size: 0.85rem;
+            margin-bottom: 1rem;
+            flex-grow: 1;
+        }
+
+        .project-meta {
+            font-family: var(--font-mono);
+            font-size: 0.75rem;
+            color: var(--accent-blue);
+            display: flex;
+            align-items: center;
+        }
+
+        .project-meta::before {
+            content: "➔";
+            margin-right: 0.5rem;
+        }
+
+        /* Manifesto */
+        .manifesto-list {
+            list-style-type: none;
+        }
+
+        .manifesto-item {
+            position: relative;
+            padding-left: 1.5rem;
+            margin-bottom: 1rem;
+            font-size: 0.95rem;
+            color: var(--text-primary);
+        }
+
+        .manifesto-item::before {
+            content: "•";
+            position: absolute;
+            left: 0;
+            color: var(--accent-blue);
+            font-weight: bold;
+            font-size: 1.2rem;
+            top: -2px;
+        }
+
+        .manifesto-title {
+            font-weight: 700;
+            color: #ffffff;
+        }
+
+        /* Footer */
+        footer {
+            margin-top: 5rem;
+            border-top: 1px solid var(--border-color);
+            padding-top: 2rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            font-family: var(--font-mono);
+            font-size: 0.8rem;
+            color: var(--text-muted);
+        }
+
+        .status-dot {
+            display: inline-block;
+            width: 8px;
+            height: 8px;
+            background-color: var(--accent-green);
+            border-radius: 50%;
+            margin-right: 0.5rem;
+            box-shadow: 0 0 8px var(--accent-green);
+        }
+
+        .status-container {
+            display: flex;
+            align-items: center;
+        }
     </style>
 </head>
 <body>
-    <h1>Ozy-666 // Systems & Network Architecture</h1>
-    <p>High-concurrency Edge routing, secure transport layers, and low-latency DNS infrastructure optimization.</p>
 
-    <h2>Production Infrastructure</h2>
-    <div class="project-card">
-        <strong><a href="https://dnsdoh.art" target="_blank" rel="noopener">DNSDOH.ART</a></strong> — Next-generation encrypted DNS infrastructure. Powered by custom optimized Nginx, AdGuardHome, Unbound, and dnscrypt-proxy. Supporting DoH3, DoH, DoT, and DoQ protocols.
+    <div class="container">
+        <!-- Header -->
+        <header>
+            <div class="terminal-user">ozy-666 @ edge-node</div>
+            <h1>Systems & Network Architecture</h1>
+            <p class="subtitle">High-concurrency edge routing, low-latency secure DNS transport layers, and zero-allocation system optimization.</p>
+        </header>
+
+        <!-- Production Showcase -->
+        <section>
+            <h2>Production Node</h2>
+            <a href="https://dnsdoh.art" class="showcase-card" target="_blank">
+                <div class="showcase-header">
+                    <span class="showcase-title">DNSDOH.ART</span>
+                    <span class="badge-live">Live</span>
+                </div>
+                <p class="showcase-desc">Next-generation encrypted public resolver. Delivering raw BGP anycast performance backed by heavily hardened Nginx, AdGuardHome, Unbound, and custom dnscrypt-proxy infrastructure.</p>
+                <div class="tech-pills">
+                    <span class="pill">DoH3 (QUIC)</span>
+                    <span class="pill">DoH</span>
+                    <span class="pill">DoQ</span>
+                    <span class="pill">DoT</span>
+                    <span class="pill">DNS</span>
+                </div>
+            </a>
+        </section>
+
+        <!-- Custom Forks -->
+        <section>
+            <h2>Optimized Go DNS Stack</h2>
+            <div class="project-grid">
+                <!-- Fork 1 -->
+                <a href="https://github.com/Ozy-666/AdGuardHome-edge-spec" class="project-card" target="_blank">
+                    <div>
+                        <div class="project-name">AdGuardHome-edge-spec</div>
+                        <p class="project-desc">Blueprint specification for the high-RPS Edge resolver. 13,000+ lines of bloatware (DHCP, parental controls, safeSearch) stripped to eliminate attack surface and runtime context-switches.</p>
+                    </div>
+                    <div class="project-meta">blueprints</div>
+                </a>
+
+                <!-- Fork 2 -->
+                <a href="https://github.com/Ozy-666/dnscrypt-proxy" class="project-card" target="_blank">
+                    <div>
+                        <div class="project-name">dnscrypt-proxy</div>
+                        <p class="project-desc">Hardened, lock-free secure DNS client. Features zero-allocation hot-path byte buffer pools (sync.Pool) and lazy-init session mappings, reducing GC pressure to 0 B/op under heavy load.</p>
+                    </div>
+                    <div class="project-meta">0 B/op client</div>
+                </a>
+
+                <!-- Fork 3 -->
+                <a href="https://github.com/Ozy-666/dnsproxy" class="project-card" target="_blank">
+                    <div>
+                        <div class="project-name">dnsproxy</div>
+                        <p class="project-desc">Custom optimized DNS transport layer for AdGuardHome. Patched with slice-pooling mechanisms to eliminate transient heap allocations during high-frequency packets forwarding.</p>
+                    </div>
+                    <div class="project-meta">transport</div>
+                </a>
+
+                <!-- Fork 4 -->
+                <a href="https://github.com/Ozy-666/urlfilter" class="project-card" target="_blank">
+                    <div>
+                        <div class="project-name">urlfilter</div>
+                        <p class="project-desc">Surgically tuned rule-matching engine. Modified with AST-based shortcut extraction, keeping regexp blocklist evaluation O(1) even during malicious unique-subdomain floods.</p>
+                    </div>
+                    <div class="project-meta">O(1) filter</div>
+                </a>
+            </div>
+        </section>
+
+        <!-- Manifesto / Principles -->
+        <section>
+            <h2>Architectural Principles</h2>
+            <ul class="manifesto-list">
+                <li class="manifesto-item"><span class="manifesto-title">Zero Garbage Collection Churn:</span> Continuous allocation is a latency trap. We reuse buffers using sync.Pools in Go net-listeners to protect the CPU from GC-sweeps.</li>
+                <li class="manifesto-item"><span class="manifesto-title">Lock-Free Concurrency:</span> Multi-core CPUs are strangled by sync.Mutex serialization. We optimize shared runtime state towards wait-free read paths (RLock/atomic).</li>
+                <li class="manifesto-item"><span class="manifesto-title">Radical Decoupling:</span> Edge systems should do only one thing. We surgically excise secondary helper components to minimize software bloat and kernel context switches.</li>
+            </ul>
+        </section>
+
+        <!-- Footer -->
+        <footer>
+            <span>ozy-666 // system-audit</span>
+            <div class="status-container">
+                <span class="status-dot"></span>
+                <span>Active & Compliant</span>
+            </div>
+        </footer>
     </div>
 
-    <h2>Core Specifications & Forks</h2>
-    <div class="project-card">
-        <strong><a href="https://github.com/Ozy-666/AdGuardHome-edge-spec">AdGuardHome-edge-spec</a></strong><br>
-        Public architectural specification and zero-allocation optimization logs for the private high-QPS DNS filtering pipeline.
-    </div>
-    
-    <div class="project-card">
-        <strong><a href="https://github.com/Ozy-666/dnscrypt-proxy">dnscrypt-proxy</a></strong><br>
-        Surgically modified secure crypto-pipe. Features custom sync.Pool buffer management to reduce heap allocations to zero on the hot path.
-    </div>
-
-    <hr style="border: 0; border-top: 1px solid #21262d; margin-top: 40px;">
-    <p style="font-size: 0.8em; color: #8b949e;">Operational status: Whitehat / Bluehat / Redhat. Verified uptime & compliance.</p>
 </body>
 </html>
