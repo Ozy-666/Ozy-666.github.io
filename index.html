@@ -289,13 +289,14 @@
                     <span class="showcase-title">DNSDOH.ART</span>
                     <span class="badge-live">Live</span>
                 </div>
-                <p class="showcase-desc">Next-generation encrypted public resolver. Delivering raw BGP anycast performance backed by heavily hardened Nginx, AdGuardHome, Unbound, and custom dnscrypt-proxy infrastructure.</p>
+                <p class="showcase-desc">Next-generation encrypted public resolver. Raw low-latency edge performance from a BoringSSL-linked Nginx and Unbound, custom AdGuardHome, and a zero-allocation dnscrypt-proxy — every layer hardened and profiled on real Zen 2 silicon.</p>
                 <div class="tech-pills">
                     <span class="pill">DoH3 (QUIC)</span>
                     <span class="pill">DoH</span>
                     <span class="pill">DoQ</span>
                     <span class="pill">DoT</span>
                     <span class="pill">DNS</span>
+                    <span class="pill">BoringSSL</span>
                 </div>
             </a>
         </section>
@@ -339,6 +340,15 @@
                     </div>
                     <div class="project-meta">O(1) filter</div>
                 </a>
+
+                <!-- Fork 5 -->
+                <a href="https://github.com/Ozy-666/AdGuardHome-edge-spec#66-cryptographic-substrate--unbound-on-boringssl" class="project-card" target="_blank">
+                    <div>
+                        <div class="project-name">unbound × BoringSSL</div>
+                        <p class="project-desc">The "impossible compile": a security-critical Unbound resolver re-linked to Google BoringSSL (fiat-crypto). Cut DNSSEC-validation CPU ~14% and worst-case latency 26% under signed-flood — verified on real Zen 2 silicon, not a hypervisor.</p>
+                    </div>
+                    <div class="project-meta">fiat-crypto</div>
+                </a>
             </div>
         </section>
 
@@ -349,6 +359,7 @@
                 <li class="manifesto-item"><span class="manifesto-title">Zero Garbage Collection Churn:</span> Continuous allocation is a latency trap. We reuse buffers using sync.Pools in Go net-listeners to protect the CPU from GC-sweeps.</li>
                 <li class="manifesto-item"><span class="manifesto-title">Lock-Free Concurrency:</span> Multi-core CPUs are strangled by sync.Mutex serialization. We optimize shared runtime state towards wait-free read paths (RLock/atomic).</li>
                 <li class="manifesto-item"><span class="manifesto-title">Radical Decoupling:</span> Edge systems should do only one thing. We surgically excise secondary helper components to minimize software bloat and kernel context switches.</li>
+                <li class="manifesto-item"><span class="manifesto-title">Verify on Real Silicon:</span> Hypervisors mask CPU feature flags (ADX/BMI2) and lie about crypto throughput. Every optimization is measured end-to-end on the target EPYC Zen 2 — never trusted from a sandbox benchmark.</li>
             </ul>
         </section>
 
