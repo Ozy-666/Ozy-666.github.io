@@ -1,378 +1,534 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta name="google-site-verification" content="UwTp8D5xEVGvek5IQWx4Zf1roakWohJRRci41RD6B0w" />
-    <title>Ozy-666 | Low-Latency Systems & Network Architecture</title>
-    <style>
-        :root {
-            --bg-color: #0d1117;
-            --card-bg: #161b22;
-            --border-color: #30363d;
-            --border-hover: #58a6ff;
-            --text-primary: #c9d1d9;
-            --text-muted: #8b949e;
-            --accent-blue: #58a6ff;
-            --accent-green: #3fb950;
-            --accent-grey: #484f58;
-            --font-sans: -apple-system, BlinkMacSystemFont, "Segoe UI", Helvetica, Arial, sans-serif, "Apple Color Emoji", "Segoe UI Emoji";
-            --font-mono: ui-monospace, SFMono-Regular, "SF Mono", Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace;
-        }
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-        * {
-            box-sizing: border-box;
-            margin: 0;
-            padding: 0;
-        }
+<title>Ozy-666 — DNS Infrastructure &amp; Performance Engineer</title>
+<meta name="description" content="Systems engineer building high-performance, privacy-maximizing encrypted DNS. Author of AdGuardHome-edge — the zero-telemetry resolver engine powering DNSDOH.ART (DoH, DoT, DoQ, HTTP/3).">
+<meta name="keywords" content="Ozy-666, DNS engineer, AdGuardHome-edge, encrypted DNS, DoH, DoT, DoQ, Unbound, BoringSSL, dnscrypt-proxy, dnsproxy, urlfilter, Go performance, DNSSEC, DNSDOH.ART">
+<meta name="author" content="Ozy-666">
+<meta name="robots" content="index, follow">
+<link rel="canonical" href="https://ozy-666.github.io/">
 
-        body {
-            background-color: var(--bg-color);
-            color: var(--text-primary);
-            font-family: var(--font-sans);
-            line-height: 1.6;
-            padding: 2rem 1rem;
-        }
+<meta property="og:type" content="profile">
+<meta property="og:title" content="Ozy-666 — DNS Infrastructure & Performance Engineer">
+<meta property="og:description" content="Author of AdGuardHome-edge, the zero-telemetry resolver engine powering DNSDOH.ART. Profile-driven Go performance engineering for encrypted DNS.">
+<meta property="og:url" content="https://ozy-666.github.io/">
+<meta property="og:image" content="https://dnsdoh.art/assets/img/dnsdoh.art-logo-schema.png">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:image" content="https://dnsdoh.art/assets/img/dnsdoh.art-logo-schema.png">
 
-        .container {
-            max-width: 800px;
-            margin: 0 auto;
-        }
+<meta name="theme-color" content="#06b6d4">
+<meta name="color-scheme" content="dark">
 
-        /* Header section */
-        header {
-            margin-bottom: 3rem;
-            border-bottom: 1px solid var(--border-color);
-            padding-bottom: 2rem;
-        }
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@graph": [
+    {
+      "@type": "ProfilePage",
+      "@id": "https://ozy-666.github.io/#profilepage",
+      "url": "https://ozy-666.github.io/",
+      "name": "Ozy-666 — DNS Infrastructure & Performance Engineer",
+      "inLanguage": "en",
+      "mainEntity": { "@id": "https://ozy-666.github.io/#person" }
+    },
+    {
+      "@type": "Person",
+      "@id": "https://ozy-666.github.io/#person",
+      "name": "Ozy-666",
+      "url": "https://ozy-666.github.io/",
+      "jobTitle": "DNS Infrastructure & Performance Engineer",
+      "description": "Systems engineer building high-performance, privacy-maximizing encrypted DNS infrastructure. Author of AdGuardHome-edge, the resolver engine powering DNSDOH.ART.",
+      "knowsAbout": ["DNS", "DNSSEC", "DNS-over-HTTPS", "DNS-over-TLS", "DNS-over-QUIC", "Go performance engineering", "Unbound", "BoringSSL", "dnscrypt-proxy", "network privacy"],
+      "sameAs": ["https://github.com/Ozy-666", "https://ozy-666.github.io"],
+      "worksFor": { "@id": "https://dnsdoh.art/#organization" }
+    },
+    {
+      "@type": "Organization",
+      "@id": "https://dnsdoh.art/#organization",
+      "name": "DNSDOH.ART",
+      "url": "https://dnsdoh.art/",
+      "founder": { "@id": "https://ozy-666.github.io/#person" }
+    },
+    {
+      "@type": "SoftwareSourceCode",
+      "name": "AdGuardHome-edge",
+      "description": "A custom, performance-engineered fork of AdGuard Home: a zero-telemetry, privacy-maximizing encrypted DNS resolver with zero-allocation hot paths and a BoringSSL cryptographic substrate.",
+      "codeRepository": "https://github.com/Ozy-666/AdGuardHome-edge-spec",
+      "programmingLanguage": "Go",
+      "runtimePlatform": "Linux",
+      "author": { "@id": "https://ozy-666.github.io/#person" },
+      "about": { "@id": "https://dnsdoh.art/#organization" }
+    }
+  ]
+}
+</script>
 
-        .terminal-user {
-            font-family: var(--font-mono);
-            color: var(--accent-blue);
-            font-size: 1.1rem;
-            margin-bottom: 0.5rem;
-        }
+<style>
+  :root{
+    --bg:#04070e; --bg2:#020617;
+    --panel:rgba(15,23,42,.55); --panel-solid:#0b1220;
+    --border:#1e293b; --border-soft:rgba(30,41,59,.7);
+    --text:#cbd5e1; --head:#f1f5f9; --muted:#64748b; --muted2:#475569;
+    --cyan:#22d3ee; --cyan-deep:#06b6d4; --emerald:#34d399; --amber:#fbbf24;
+    --mono:"JetBrains Mono",ui-monospace,SFMono-Regular,"SF Mono",Menlo,Consolas,monospace;
+    --sans:"Inter",system-ui,-apple-system,"Segoe UI",Roboto,Helvetica,Arial,sans-serif;
+  }
+  *{box-sizing:border-box;margin:0;padding:0}
+  html{scroll-behavior:smooth;-webkit-text-size-adjust:100%}
+  body{
+    background:var(--bg); color:var(--text); font-family:var(--sans);
+    line-height:1.6; font-size:16px; overflow-x:hidden;
+    -webkit-font-smoothing:antialiased;
+    background-image:
+      radial-gradient(60rem 40rem at 75% -10%, rgba(6,182,212,.10), transparent 60%),
+      radial-gradient(50rem 40rem at 0% 10%, rgba(99,102,241,.06), transparent 55%);
+    background-attachment:fixed;
+  }
+  ::selection{background:rgba(34,211,238,.25);color:#a5f3fc}
+  ::-webkit-scrollbar{width:8px;height:8px}
+  ::-webkit-scrollbar-track{background:var(--bg2)}
+  ::-webkit-scrollbar-thumb{background:#1e293b;border-radius:4px}
+  ::-webkit-scrollbar-thumb:hover{background:var(--cyan-deep)}
+  a{color:inherit;text-decoration:none}
+  svg{display:block}
+  .wrap{max-width:1080px;margin:0 auto;padding:0 24px}
 
-        h1 {
-            font-size: 2.2rem;
-            font-weight: 800;
-            letter-spacing: -0.05em;
-            margin-bottom: 0.5rem;
-            color: #ffffff;
-        }
+  /* grid texture */
+  .grid-bg{
+    position:fixed;inset:0;z-index:-1;pointer-events:none;opacity:.5;
+    background-image:
+      linear-gradient(to right, rgba(34,211,238,.035) 1px, transparent 1px),
+      linear-gradient(to bottom, rgba(34,211,238,.035) 1px, transparent 1px);
+    background-size:44px 44px;
+    mask-image:radial-gradient(ellipse 100% 60% at 50% 0%, #000 30%, transparent 80%);
+  }
 
-        .subtitle {
-            color: var(--text-muted);
-            font-size: 1.1rem;
-            max-width: 600px;
-        }
+  /* mono label */
+  .tag{font-family:var(--mono);font-size:11px;letter-spacing:.22em;text-transform:uppercase;color:var(--cyan);font-weight:600}
+  .tag.muted{color:var(--muted)}
 
-        /* Section styles */
-        section {
-            margin-bottom: 3rem;
-        }
+  /* nav */
+  header{position:sticky;top:0;z-index:50;backdrop-filter:blur(10px);
+    background:rgba(4,7,14,.78);border-bottom:1px solid var(--border-soft)}
+  nav{display:flex;align-items:center;justify-content:space-between;height:62px}
+  .brand{display:flex;align-items:center;gap:11px;font-family:var(--mono);font-weight:700;color:var(--head);letter-spacing:.02em}
+  .brand .logo{width:34px;height:34px;display:grid;place-items:center;border:1px solid rgba(34,211,238,.3);
+    border-radius:9px;background:rgba(34,211,238,.08);color:var(--cyan)}
+  .brand b{color:var(--cyan)}
+  .nav-links{display:flex;align-items:center;gap:26px;font-family:var(--mono);font-size:12.5px;letter-spacing:.04em}
+  .nav-links a{color:var(--muted);transition:color .2s}
+  .nav-links a:hover{color:var(--cyan)}
+  .nav-cta{display:inline-flex;align-items:center;gap:7px;padding:8px 15px;border-radius:8px;
+    border:1px solid rgba(34,211,238,.35);background:rgba(34,211,238,.08);color:var(--cyan)!important;font-weight:600;
+    transition:all .2s}
+  .nav-cta:hover{background:rgba(34,211,238,.16);box-shadow:0 0 22px rgba(6,182,212,.25)}
+  @media(max-width:680px){.nav-links a:not(.nav-cta){display:none}}
 
-        h2 {
-            font-family: var(--font-mono);
-            font-size: 1rem;
-            color: var(--text-muted);
-            text-transform: uppercase;
-            letter-spacing: 0.1em;
-            margin-bottom: 1.5rem;
-            display: flex;
-            align-items: center;
-        }
+  /* hero */
+  .hero{padding:96px 0 64px;position:relative}
+  .pill{display:inline-flex;align-items:center;gap:9px;padding:6px 14px;border-radius:999px;
+    border:1px solid rgba(34,211,238,.25);background:rgba(2,6,23,.6);margin-bottom:30px;
+    font-family:var(--mono);font-size:11px;letter-spacing:.18em;text-transform:uppercase;color:var(--cyan)}
+  .dot{width:7px;height:7px;border-radius:50%;background:var(--emerald);box-shadow:0 0 0 0 rgba(52,211,153,.6);
+    animation:ping 2s cubic-bezier(0,0,.2,1) infinite}
+  @keyframes ping{0%{box-shadow:0 0 0 0 rgba(52,211,153,.5)}70%,100%{box-shadow:0 0 0 8px rgba(52,211,153,0)}}
+  h1{font-size:clamp(2.4rem,6vw,4.1rem);line-height:1.04;font-weight:800;color:var(--head);letter-spacing:-.02em;margin-bottom:22px}
+  h1 .grad{background:linear-gradient(110deg,var(--cyan),#818cf8 70%);-webkit-background-clip:text;background-clip:text;color:transparent}
+  .lede{font-size:clamp(1.05rem,2.2vw,1.28rem);color:#94a3b8;max-width:680px;font-weight:300;line-height:1.65}
+  .lede b{color:var(--head);font-weight:500}
+  .hero-cta{display:flex;flex-wrap:wrap;gap:14px;margin-top:38px}
+  .btn{display:inline-flex;align-items:center;gap:9px;padding:13px 22px;border-radius:10px;font-weight:600;
+    font-size:14.5px;transition:all .2s;font-family:var(--sans)}
+  .btn-primary{background:var(--cyan-deep);color:#04070e!important;box-shadow:0 0 26px rgba(6,182,212,.3)}
+  .btn-primary:hover{background:var(--cyan);transform:translateY(-2px);box-shadow:0 6px 30px rgba(6,182,212,.4)}
+  .btn-ghost{border:1px solid var(--border);color:var(--text)!important;background:rgba(15,23,42,.4)}
+  .btn-ghost:hover{border-color:rgba(34,211,238,.5);color:var(--cyan)!important}
 
-        h2::after {
-            content: "";
-            flex-grow: 1;
-            height: 1px;
-            background-color: var(--border-color);
-            margin-left: 1rem;
-        }
+  /* section scaffolding */
+  section{padding:60px 0;position:relative}
+  .sec-head{margin-bottom:38px}
+  .sec-head h2{font-size:clamp(1.6rem,3.5vw,2.1rem);color:var(--head);font-weight:700;letter-spacing:-.01em;margin:10px 0 8px}
+  .sec-head p{color:var(--muted);max-width:620px;font-size:15px}
+  .rule{height:1px;background:linear-gradient(90deg,var(--border),transparent);margin-top:18px}
 
-        /* Showcase Card */
-        .showcase-card {
-            background-color: var(--card-bg);
-            border: 1px solid var(--border-color);
-            border-radius: 6px;
-            padding: 1.5rem;
-            transition: border-color 0.2s, transform 0.2s;
-            text-decoration: none;
-            display: block;
-            margin-bottom: 2.5rem;
-        }
+  /* feature: dnsdoh.art */
+  .flagship{border:1px solid rgba(34,211,238,.22);border-radius:18px;overflow:hidden;
+    background:linear-gradient(160deg,rgba(8,47,73,.5),rgba(2,6,23,.6));position:relative}
+  .flagship::before{content:"";position:absolute;inset:0;pointer-events:none;
+    background:radial-gradient(40rem 20rem at 80% 0%,rgba(6,182,212,.14),transparent 60%)}
+  .flagship-in{position:relative;padding:40px;display:grid;grid-template-columns:1.3fr 1fr;gap:36px;align-items:center}
+  @media(max-width:760px){.flagship-in{grid-template-columns:1fr;padding:30px 26px;gap:26px}}
+  .flagship h3{font-size:1.7rem;color:var(--head);font-weight:700;margin:14px 0 12px;letter-spacing:-.01em}
+  .flagship h3 b{color:var(--cyan)}
+  .flagship p{color:#94a3b8;font-size:15px;margin-bottom:22px}
+  .chips{display:flex;flex-wrap:wrap;gap:8px;margin-bottom:26px}
+  .chip{font-family:var(--mono);font-size:11px;padding:5px 11px;border-radius:7px;border:1px solid var(--border);
+    background:rgba(2,6,23,.5);color:#7dd3fc;letter-spacing:.03em}
+  .stat-col{display:grid;gap:14px}
+  .stat{border:1px solid var(--border-soft);border-radius:12px;padding:16px 18px;background:rgba(2,6,23,.45)}
+  .stat .n{font-family:var(--mono);font-size:1.5rem;font-weight:700;color:var(--head);line-height:1}
+  .stat .n b{color:var(--cyan)}
+  .stat .l{font-family:var(--mono);font-size:10.5px;letter-spacing:.12em;text-transform:uppercase;color:var(--muted);margin-top:7px}
 
-        .showcase-card:hover {
-            border-color: var(--accent-green);
-            transform: translateY(-2px);
-        }
+  /* cards grid (repos) */
+  .grid{display:grid;grid-template-columns:repeat(2,1fr);gap:18px}
+  @media(max-width:720px){.grid{grid-template-columns:1fr}}
+  .card{border:1px solid var(--border);border-radius:14px;padding:24px;background:var(--panel);
+    transition:transform .2s,border-color .2s,box-shadow .2s;position:relative;display:flex;flex-direction:column}
+  .card:hover{transform:translateY(-3px);border-color:rgba(34,211,238,.4);box-shadow:0 10px 40px -12px rgba(6,182,212,.25)}
+  .card .ico{width:42px;height:42px;border-radius:10px;display:grid;place-items:center;
+    border:1px solid rgba(34,211,238,.22);background:rgba(34,211,238,.07);color:var(--cyan);margin-bottom:16px}
+  .card h3{font-family:var(--mono);font-size:15px;color:var(--head);font-weight:700;margin-bottom:4px;display:flex;align-items:center;gap:8px}
+  .card .branch{font-family:var(--mono);font-size:11px;color:var(--muted);margin-bottom:12px}
+  .card p{font-size:14px;color:#94a3b8;flex:1}
+  .metric{margin-top:16px;padding-top:14px;border-top:1px solid var(--border-soft);
+    display:flex;align-items:baseline;gap:10px}
+  .metric .big{font-family:var(--mono);font-weight:700;color:var(--emerald);font-size:1.05rem}
+  .metric .what{font-size:12px;color:var(--muted)}
+  .card .gh{margin-top:14px;font-family:var(--mono);font-size:12px;color:var(--cyan);display:inline-flex;align-items:center;gap:6px;opacity:.85;transition:opacity .2s}
+  .card:hover .gh{opacity:1}
 
-        .showcase-header {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            margin-bottom: 0.75rem;
-        }
+  /* architecture chain */
+  .chain{border:1px solid var(--border);border-radius:16px;background:var(--panel);padding:30px 26px;overflow-x:auto}
+  .chain-row{display:flex;align-items:stretch;gap:0;min-width:min-content}
+  .node{flex:1;min-width:118px;text-align:center;padding:18px 12px;border:1px solid var(--border-soft);border-radius:11px;
+    background:rgba(2,6,23,.5);position:relative}
+  .node .ni{width:34px;height:34px;margin:0 auto 9px;display:grid;place-items:center;border-radius:8px;
+    background:rgba(34,211,238,.08);border:1px solid rgba(34,211,238,.2);color:var(--cyan)}
+  .node .nn{font-family:var(--mono);font-size:12px;color:var(--head);font-weight:600}
+  .node .nd{font-family:var(--mono);font-size:10px;color:var(--muted);margin-top:3px;letter-spacing:.02em}
+  .node.sec .ni{color:var(--emerald);background:rgba(52,211,153,.08);border-color:rgba(52,211,153,.22)}
+  .arrow{display:flex;align-items:center;color:var(--muted2);padding:0 4px;flex:0 0 auto}
+  @media(max-width:720px){
+    .chain-row{flex-direction:column;gap:0}
+    .arrow{transform:rotate(90deg);padding:8px 0;justify-content:center}
+    .node{min-width:0}
+  }
 
-        .showcase-title {
-            font-size: 1.3rem;
-            font-weight: 700;
-            color: #ffffff;
-            font-family: var(--font-mono);
-        }
+  /* numbers strip */
+  .nums{display:grid;grid-template-columns:repeat(4,1fr);gap:16px}
+  @media(max-width:720px){.nums{grid-template-columns:repeat(2,1fr)}}
+  .num{border:1px solid var(--border);border-radius:13px;padding:22px 18px;background:var(--panel);text-align:center}
+  .num .v{font-family:var(--mono);font-size:1.7rem;font-weight:800;color:var(--head);line-height:1;letter-spacing:-.02em}
+  .num .v b{color:var(--cyan)}
+  .num .k{font-size:12.5px;color:var(--muted);margin-top:10px;line-height:1.4}
 
-        .badge-live {
-            background-color: rgba(63, 185, 80, 0.15);
-            color: var(--accent-green);
-            font-family: var(--font-mono);
-            font-size: 0.75rem;
-            padding: 0.2rem 0.6rem;
-            border-radius: 20px;
-            border: 1px solid rgba(63, 185, 80, 0.3);
-            text-transform: uppercase;
-            font-weight: 600;
-            letter-spacing: 0.05em;
-        }
+  /* principles */
+  .principles{display:grid;grid-template-columns:repeat(2,1fr);gap:16px}
+  @media(max-width:680px){.principles{grid-template-columns:1fr}}
+  .pr{display:flex;gap:15px;padding:22px;border:1px solid var(--border);border-radius:13px;background:var(--panel)}
+  .pr .pi{flex:0 0 auto;width:40px;height:40px;border-radius:10px;display:grid;place-items:center;
+    background:rgba(34,211,238,.07);border:1px solid rgba(34,211,238,.2);color:var(--cyan)}
+  .pr h4{font-size:15px;color:var(--head);font-weight:600;margin-bottom:5px}
+  .pr p{font-size:13.5px;color:var(--muted)}
 
-        .showcase-desc {
-            color: var(--text-muted);
-            margin-bottom: 1rem;
-            font-size: 0.95rem;
-        }
+  /* footer */
+  footer{border-top:1px solid var(--border-soft);padding:48px 0 60px;margin-top:30px}
+  .foot{display:flex;flex-wrap:wrap;justify-content:space-between;align-items:center;gap:24px}
+  .foot-l{display:flex;align-items:center;gap:11px;font-family:var(--mono);color:var(--muted);font-size:13px}
+  .foot-links{display:flex;gap:22px;font-family:var(--mono);font-size:13px}
+  .foot-links a{color:var(--muted);display:inline-flex;align-items:center;gap:7px;transition:color .2s}
+  .foot-links a:hover{color:var(--cyan)}
+  .foot-note{margin-top:26px;font-family:var(--mono);font-size:11.5px;color:var(--muted2);line-height:1.7}
+  .foot-note a{color:var(--muted)}
+  .foot-note a:hover{color:var(--cyan)}
 
-        .tech-pills {
-            display: flex;
-            flex-wrap: wrap;
-            gap: 0.5rem;
-        }
-
-        .pill {
-            background-color: rgba(88, 166, 255, 0.1);
-            color: var(--accent-blue);
-            font-family: var(--font-mono);
-            font-size: 0.75rem;
-            padding: 0.1rem 0.5rem;
-            border-radius: 4px;
-            border: 1px solid rgba(88, 166, 255, 0.2);
-        }
-
-        /* Project Grid */
-        .project-grid {
-            display: grid;
-            grid-template-columns: 1fr;
-            gap: 1rem;
-        }
-
-        @media (min-width: 600px) {
-            .project-grid {
-                grid-template-columns: 1fr 1fr;
-            }
-        }
-
-        .project-card {
-            background-color: var(--card-bg);
-            border: 1px solid var(--border-color);
-            border-radius: 6px;
-            padding: 1.25rem;
-            text-decoration: none;
-            display: flex;
-            flex-direction: column;
-            justify-content: space-between;
-            transition: border-color 0.2s, transform 0.2s;
-        }
-
-        .project-card:hover {
-            border-color: var(--border-hover);
-            transform: translateY(-2px);
-        }
-
-        .project-name {
-            font-size: 1.1rem;
-            font-weight: 700;
-            color: #ffffff;
-            font-family: var(--font-mono);
-            margin-bottom: 0.5rem;
-        }
-
-        .project-desc {
-            color: var(--text-muted);
-            font-size: 0.85rem;
-            margin-bottom: 1rem;
-            flex-grow: 1;
-        }
-
-        .project-meta {
-            font-family: var(--font-mono);
-            font-size: 0.75rem;
-            color: var(--accent-blue);
-            display: flex;
-            align-items: center;
-        }
-
-        .project-meta::before {
-            content: "➔";
-            margin-right: 0.5rem;
-        }
-
-        /* Manifesto */
-        .manifesto-list {
-            list-style-type: none;
-        }
-
-        .manifesto-item {
-            position: relative;
-            padding-left: 1.5rem;
-            margin-bottom: 1rem;
-            font-size: 0.95rem;
-            color: var(--text-primary);
-        }
-
-        .manifesto-item::before {
-            content: "•";
-            position: absolute;
-            left: 0;
-            color: var(--accent-blue);
-            font-weight: bold;
-            font-size: 1.2rem;
-            top: -2px;
-        }
-
-        .manifesto-title {
-            font-weight: 700;
-            color: #ffffff;
-        }
-
-        /* Footer */
-        footer {
-            margin-top: 5rem;
-            border-top: 1px solid var(--border-color);
-            padding-top: 2rem;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            font-family: var(--font-mono);
-            font-size: 0.8rem;
-            color: var(--text-muted);
-        }
-
-        .status-dot {
-            display: inline-block;
-            width: 8px;
-            height: 8px;
-            background-color: var(--accent-green);
-            border-radius: 50%;
-            margin-right: 0.5rem;
-            box-shadow: 0 0 8px var(--accent-green);
-        }
-
-        .status-container {
-            display: flex;
-            align-items: center;
-        }
-    </style>
+  /* entrance */
+  .rise{opacity:0;transform:translateY(16px);animation:rise .7s cubic-bezier(.2,.7,.2,1) forwards}
+  @keyframes rise{to{opacity:1;transform:none}}
+  .d1{animation-delay:.05s}.d2{animation-delay:.13s}.d3{animation-delay:.21s}.d4{animation-delay:.29s}
+  @media(prefers-reduced-motion:reduce){.rise{animation:none;opacity:1;transform:none}}
+</style>
 </head>
 <body>
+<div class="grid-bg"></div>
 
-    <div class="container">
-        <!-- Header -->
-        <header>
-            <div class="terminal-user">ozy-666 @ edge-node</div>
-            <h1>Systems & Network Architecture</h1>
-            <p class="subtitle">High-concurrency edge routing, low-latency secure DNS transport layers, and zero-allocation system optimization.</p>
-        </header>
+<header>
+  <div class="wrap">
+    <nav>
+      <a href="/" class="brand">
+        <span class="logo">
+          <svg width="19" height="19" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 13c0 5-3.5 7.5-7.66 8.95a1 1 0 0 1-.67-.01C7.5 20.5 4 18 4 13V6a1 1 0 0 1 1-1c2 0 4.5-1.2 6.24-2.72a1.17 1.17 0 0 1 1.52 0C14.51 3.81 17 5 19 5a1 1 0 0 1 1 1z"/><path d="m9 12 2 2 4-4"/></svg>
+        </span>
+        Ozy<b>-666</b>
+      </a>
+      <div class="nav-links">
+        <a href="#work">Work</a>
+        <a href="#stack">Stack</a>
+        <a href="#numbers">Numbers</a>
+        <a href="https://github.com/Ozy-666" rel="me">GitHub</a>
+        <a href="https://dnsdoh.art/" class="nav-cta">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14"/><path d="m12 5 7 7-7 7"/></svg>
+          DNSDOH.ART
+        </a>
+      </div>
+    </nav>
+  </div>
+</header>
 
-        <!-- Production Showcase -->
-        <section>
-            <h2>Production Node</h2>
-            <a href="https://dnsdoh.art" class="showcase-card" target="_blank">
-                <div class="showcase-header">
-                    <span class="showcase-title">DNSDOH.ART</span>
-                    <span class="badge-live">Live</span>
-                </div>
-                <p class="showcase-desc">Next-generation encrypted public resolver. Raw low-latency edge performance from a BoringSSL-linked Nginx and Unbound, custom AdGuardHome, and a zero-allocation dnscrypt-proxy — every layer hardened and profiled on real Zen 2 silicon.</p>
-                <div class="tech-pills">
-                    <span class="pill">DoH3 (QUIC)</span>
-                    <span class="pill">DoH</span>
-                    <span class="pill">DoQ</span>
-                    <span class="pill">DoT</span>
-                    <span class="pill">DNS</span>
-                    <span class="pill">BoringSSL</span>
-                </div>
-            </a>
-        </section>
-
-        <!-- Custom Forks -->
-        <section>
-            <h2>Optimized Go DNS Stack</h2>
-            <div class="project-grid">
-                <!-- Fork 1 -->
-                <a href="https://github.com/Ozy-666/AdGuardHome-edge-spec" class="project-card" target="_blank">
-                    <div>
-                        <div class="project-name">AdGuardHome-edge-spec</div>
-                        <p class="project-desc">Blueprint specification for the high-RPS Edge resolver. 13,000+ lines of bloatware (DHCP, parental controls, safeSearch) stripped to eliminate attack surface and runtime context-switches.</p>
-                    </div>
-                    <div class="project-meta">blueprints</div>
-                </a>
-
-                <!-- Fork 2 -->
-                <a href="https://github.com/Ozy-666/dnscrypt-proxy" class="project-card" target="_blank">
-                    <div>
-                        <div class="project-name">dnscrypt-proxy</div>
-                        <p class="project-desc">Hardened, lock-free secure DNS client. Features zero-allocation hot-path byte buffer pools (sync.Pool) and lazy-init session mappings, reducing GC pressure to 0 B/op under heavy load.</p>
-                    </div>
-                    <div class="project-meta">0 B/op client</div>
-                </a>
-
-                <!-- Fork 3 -->
-                <a href="https://github.com/Ozy-666/dnsproxy" class="project-card" target="_blank">
-                    <div>
-                        <div class="project-name">dnsproxy</div>
-                        <p class="project-desc">Custom optimized DNS transport layer for AdGuardHome. Patched with slice-pooling mechanisms to eliminate transient heap allocations during high-frequency packets forwarding.</p>
-                    </div>
-                    <div class="project-meta">transport</div>
-                </a>
-
-                <!-- Fork 4 -->
-                <a href="https://github.com/Ozy-666/urlfilter" class="project-card" target="_blank">
-                    <div>
-                        <div class="project-name">urlfilter</div>
-                        <p class="project-desc">Surgically tuned rule-matching engine. Modified with AST-based shortcut extraction, keeping regexp blocklist evaluation O(1) even during malicious unique-subdomain floods.</p>
-                    </div>
-                    <div class="project-meta">O(1) filter</div>
-                </a>
-
-                <!-- Fork 5 -->
-                <a href="https://github.com/Ozy-666/AdGuardHome-edge-spec#66-cryptographic-substrate--unbound-on-boringssl" class="project-card" target="_blank">
-                    <div>
-                        <div class="project-name">unbound × BoringSSL</div>
-                        <p class="project-desc">The "impossible compile": a security-critical Unbound resolver re-linked to Google BoringSSL (fiat-crypto). Cut DNSSEC-validation CPU ~14% and worst-case latency 26% under signed-flood — verified on real Zen 2 silicon, not a hypervisor.</p>
-                    </div>
-                    <div class="project-meta">fiat-crypto</div>
-                </a>
-            </div>
-        </section>
-
-        <!-- Manifesto / Principles -->
-        <section>
-            <h2>Architectural Principles</h2>
-            <ul class="manifesto-list">
-                <li class="manifesto-item"><span class="manifesto-title">Zero Garbage Collection Churn:</span> Continuous allocation is a latency trap. We reuse buffers using sync.Pools in Go net-listeners to protect the CPU from GC-sweeps.</li>
-                <li class="manifesto-item"><span class="manifesto-title">Lock-Free Concurrency:</span> Multi-core CPUs are strangled by sync.Mutex serialization. We optimize shared runtime state towards wait-free read paths (RLock/atomic).</li>
-                <li class="manifesto-item"><span class="manifesto-title">Radical Decoupling:</span> Edge systems should do only one thing. We surgically excise secondary helper components to minimize software bloat and kernel context switches.</li>
-                <li class="manifesto-item"><span class="manifesto-title">Verify on Real Silicon:</span> Hypervisors mask CPU feature flags (ADX/BMI2) and lie about crypto throughput. Every optimization is measured end-to-end on the target EPYC Zen 2 — never trusted from a sandbox benchmark.</li>
-            </ul>
-        </section>
-
-        <!-- Footer -->
-        <footer>
-            <span>ozy-666 // system-audit</span>
-            <div class="status-container">
-                <span class="status-dot"></span>
-                <span>Active & Compliant</span>
-            </div>
-        </footer>
+<main>
+  <!-- HERO -->
+  <section class="hero">
+    <div class="wrap">
+      <div class="pill rise d1"><span class="dot"></span> Building encrypted DNS at the edge</div>
+      <h1 class="rise d2">I engineer DNS<br>that's <span class="grad">private &amp; fast</span><br>by construction.</h1>
+      <p class="lede rise d3">I'm <b>Ozy-666</b> — a systems engineer focused on encrypted-DNS infrastructure. I'm the author of <b>AdGuardHome-edge</b>, a profile-driven, zero-telemetry resolver engine with zero-allocation hot paths and a BoringSSL cryptographic substrate. It powers <b>DNSDOH.ART</b>, my public no-logs resolver.</p>
+      <div class="hero-cta rise d4">
+        <a href="https://dnsdoh.art/" class="btn btn-primary">
+          <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 13c0 5-3.5 7.5-7.66 8.95a1 1 0 0 1-.67-.01C7.5 20.5 4 18 4 13V6a1 1 0 0 1 1-1c2 0 4.5-1.2 6.24-2.72a1.17 1.17 0 0 1 1.52 0C14.51 3.81 17 5 19 5a1 1 0 0 1 1 1z"/><path d="m9 12 2 2 4-4"/></svg>
+          Use my free resolver
+        </a>
+        <a href="https://github.com/Ozy-666/AdGuardHome-edge-spec" class="btn btn-ghost">
+          <svg width="17" height="17" viewBox="0 0 24 24" fill="currentColor"><path d="M12 .5C5.7.5.5 5.7.5 12c0 5.1 3.3 9.4 7.9 10.9.6.1.8-.2.8-.5v-2c-3.2.7-3.9-1.4-3.9-1.4-.5-1.3-1.3-1.7-1.3-1.7-1-.7.1-.7.1-.7 1.2.1 1.8 1.2 1.8 1.2 1 1.8 2.8 1.3 3.5 1 .1-.8.4-1.3.7-1.6-2.6-.3-5.3-1.3-5.3-5.7 0-1.3.5-2.3 1.2-3.1-.1-.3-.5-1.5.1-3.1 0 0 1-.3 3.3 1.2a11.5 11.5 0 0 1 6 0C17.3 4.7 18.3 5 18.3 5c.6 1.6.2 2.8.1 3.1.8.8 1.2 1.8 1.2 3.1 0 4.4-2.7 5.4-5.3 5.7.4.4.8 1.1.8 2.2v3.3c0 .3.2.6.8.5 4.6-1.5 7.9-5.8 7.9-10.9C23.5 5.7 18.3.5 12 .5z"/></svg>
+          Read the spec
+        </a>
+      </div>
     </div>
+  </section>
+
+  <!-- FLAGSHIP -->
+  <section id="flagship">
+    <div class="wrap">
+      <div class="flagship">
+        <div class="flagship-in">
+          <div>
+            <span class="tag">Production deployment</span>
+            <h3>DNSDOH<b>.ART</b></h3>
+            <p>A free, public, zero-retention encrypted DNS resolver. No logs, no telemetry, no ads — just fast, private name resolution with built-in ad &amp; tracker blocking across every modern protocol.</p>
+            <div class="chips">
+              <span class="chip">DoH</span><span class="chip">DoT</span><span class="chip">DoQ</span>
+              <span class="chip">HTTP/3</span><span class="chip">DNSSEC</span><span class="chip">No-Logs</span>
+            </div>
+            <a href="https://dnsdoh.art/" class="btn btn-primary">
+              Visit DNSDOH.ART
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M7 17 17 7"/><path d="M7 7h10v10"/></svg>
+            </a>
+          </div>
+          <div class="stat-col">
+            <div class="stat"><div class="n"><b>8,000</b> qps</div><div class="l">Sustained · 0 loss</div></div>
+            <div class="stat"><div class="n">~<b>145</b> µs</div><div class="l">Cache-hit latency</div></div>
+            <div class="stat"><div class="n"><b>0</b> logs</div><div class="l">RAM-only · zero retention</div></div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- WORK / REPOS -->
+  <section id="work">
+    <div class="wrap">
+      <div class="sec-head">
+        <span class="tag">Open work</span>
+        <h2>The engine, in four forks</h2>
+        <p>AdGuardHome-edge is a layered system. Every change is justified by a profile (pprof / benchstat) before it ships — and rejected optimizations are documented just as honestly as the wins.</p>
+        <div class="rule"></div>
+      </div>
+      <div class="grid">
+
+        <div class="card">
+          <div class="ico">
+            <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><path d="M14 2v6h6"/><path d="M16 13H8"/><path d="M16 17H8"/><path d="M10 9H8"/></svg>
+          </div>
+          <h3>AdGuardHome-edge-spec</h3>
+          <div class="branch">the engineering record</div>
+          <p>The full specification: a privacy-stripped, performance-engineered AdGuard Home fork. ~13,000 lines of unused code removed, cloud-leaking features (SafeBrowsing, EDNS Client Subnet, Whois) eliminated, zero-allocation request pipeline.</p>
+          <div class="metric"><span class="big">24.6 MB</span><span class="what">binary · −10 MB of bloat</span></div>
+          <a class="gh" href="https://github.com/Ozy-666/AdGuardHome-edge-spec">
+            <svg width="13" height="13" viewBox="0 0 24 24" fill="currentColor"><path d="M12 .5C5.7.5.5 5.7.5 12c0 5.1 3.3 9.4 7.9 10.9.6.1.8-.2.8-.5v-2c-3.2.7-3.9-1.4-3.9-1.4-.5-1.3-1.3-1.7-1.3-1.7-1-.7.1-.7.1-.7 1.2.1 1.8 1.2 1.8 1.2 1 1.8 2.8 1.3 3.5 1 .1-.8.4-1.3.7-1.6-2.6-.3-5.3-1.3-5.3-5.7 0-1.3.5-2.3 1.2-3.1-.1-.3-.5-1.5.1-3.1 0 0 1-.3 3.3 1.2a11.5 11.5 0 0 1 6 0C17.3 4.7 18.3 5 18.3 5c.6 1.6.2 2.8.1 3.1.8.8 1.2 1.8 1.2 3.1 0 4.4-2.7 5.4-5.3 5.7.4.4.8 1.1.8 2.2v3.3c0 .3.2.6.8.5 4.6-1.5 7.9-5.8 7.9-10.9C23.5 5.7 18.3.5 12 .5z"/></svg>
+            github.com/Ozy-666/AdGuardHome-edge-spec
+          </a>
+        </div>
+
+        <div class="card">
+          <div class="ico">
+            <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect width="20" height="8" x="2" y="2" rx="2"/><rect width="20" height="8" x="2" y="14" rx="2"/><path d="M6 6h.01"/><path d="M6 18h.01"/></svg>
+          </div>
+          <h3>dnsproxy</h3>
+          <div class="branch">branch · edge-udp-pool</div>
+          <p>The transport layer. Zero-allocation UDP and TCP/DoT write paths via buffer pools, lock-free upstream RTT tracking (<span style="font-family:var(--mono);color:#7dd3fc">atomic.Pointer</span> copy-on-write), <span style="font-family:var(--mono);color:#7dd3fc">SO_REUSEPORT</span> listener sharding, and QUIC stream-flood caps.</p>
+          <div class="metric"><span class="big">+101%</span><span class="what">throughput · pooled upstreams @ c=400</span></div>
+          <a class="gh" href="https://github.com/Ozy-666/dnsproxy">
+            <svg width="13" height="13" viewBox="0 0 24 24" fill="currentColor"><path d="M12 .5C5.7.5.5 5.7.5 12c0 5.1 3.3 9.4 7.9 10.9.6.1.8-.2.8-.5v-2c-3.2.7-3.9-1.4-3.9-1.4-.5-1.3-1.3-1.7-1.3-1.7-1-.7.1-.7.1-.7 1.2.1 1.8 1.2 1.8 1.2 1 1.8 2.8 1.3 3.5 1 .1-.8.4-1.3.7-1.6-2.6-.3-5.3-1.3-5.3-5.7 0-1.3.5-2.3 1.2-3.1-.1-.3-.5-1.5.1-3.1 0 0 1-.3 3.3 1.2a11.5 11.5 0 0 1 6 0C17.3 4.7 18.3 5 18.3 5c.6 1.6.2 2.8.1 3.1.8.8 1.2 1.8 1.2 3.1 0 4.4-2.7 5.4-5.3 5.7.4.4.8 1.1.8 2.2v3.3c0 .3.2.6.8.5 4.6-1.5 7.9-5.8 7.9-10.9C23.5 5.7 18.3.5 12 .5z"/></svg>
+            github.com/Ozy-666/dnsproxy
+          </a>
+        </div>
+
+        <div class="card">
+          <div class="ico">
+            <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect width="18" height="11" x="3" y="11" rx="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg>
+          </div>
+          <h3>dnscrypt-proxy</h3>
+          <div class="branch">branch · edge-stable</div>
+          <p>The encrypted upstream client. Pooled query/response buffers (4096 B → 0 allocs), lock-free WP2 server selection, monitoring UI and Oblivious-DoH removed (−455 KB), resolvers pinned by static stamps only.</p>
+          <div class="metric"><span class="big">0</span><span class="what">reachable vulnerabilities · audited 2026-06</span></div>
+          <a class="gh" href="https://github.com/Ozy-666/dnscrypt-proxy">
+            <svg width="13" height="13" viewBox="0 0 24 24" fill="currentColor"><path d="M12 .5C5.7.5.5 5.7.5 12c0 5.1 3.3 9.4 7.9 10.9.6.1.8-.2.8-.5v-2c-3.2.7-3.9-1.4-3.9-1.4-.5-1.3-1.3-1.7-1.3-1.7-1-.7.1-.7.1-.7 1.2.1 1.8 1.2 1.8 1.2 1 1.8 2.8 1.3 3.5 1 .1-.8.4-1.3.7-1.6-2.6-.3-5.3-1.3-5.3-5.7 0-1.3.5-2.3 1.2-3.1-.1-.3-.5-1.5.1-3.1 0 0 1-.3 3.3 1.2a11.5 11.5 0 0 1 6 0C17.3 4.7 18.3 5 18.3 5c.6 1.6.2 2.8.1 3.1.8.8 1.2 1.8 1.2 3.1 0 4.4-2.7 5.4-5.3 5.7.4.4.8 1.1.8 2.2v3.3c0 .3.2.6.8.5 4.6-1.5 7.9-5.8 7.9-10.9C23.5 5.7 18.3.5 12 .5z"/></svg>
+            github.com/Ozy-666/dnscrypt-proxy
+          </a>
+        </div>
+
+        <div class="card">
+          <div class="ico">
+            <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polygon points="22 3 2 3 10 12.46 10 19 14 21 14 12.46 22 3"/></svg>
+          </div>
+          <h3>urlfilter</h3>
+          <div class="branch">library · filtering engine</div>
+          <p>The rule-matching core. AST-based required-literal extraction indexes previously-unindexed regexp rules, closing the O(N) cache-miss vector. Equivalence-verified: 0 divergences across 39,983 hosts plus 130k fuzz executions.</p>
+          <div class="metric"><span class="big">248×</span><span class="what">faster regexp flood · 111 µs → 449 ns</span></div>
+          <a class="gh" href="https://github.com/Ozy-666/urlfilter">
+            <svg width="13" height="13" viewBox="0 0 24 24" fill="currentColor"><path d="M12 .5C5.7.5.5 5.7.5 12c0 5.1 3.3 9.4 7.9 10.9.6.1.8-.2.8-.5v-2c-3.2.7-3.9-1.4-3.9-1.4-.5-1.3-1.3-1.7-1.3-1.7-1-.7.1-.7.1-.7 1.2.1 1.8 1.2 1.8 1.2 1 1.8 2.8 1.3 3.5 1 .1-.8.4-1.3.7-1.6-2.6-.3-5.3-1.3-5.3-5.7 0-1.3.5-2.3 1.2-3.1-.1-.3-.5-1.5.1-3.1 0 0 1-.3 3.3 1.2a11.5 11.5 0 0 1 6 0C17.3 4.7 18.3 5 18.3 5c.6 1.6.2 2.8.1 3.1.8.8 1.2 1.8 1.2 3.1 0 4.4-2.7 5.4-5.3 5.7.4.4.8 1.1.8 2.2v3.3c0 .3.2.6.8.5 4.6-1.5 7.9-5.8 7.9-10.9C23.5 5.7 18.3.5 12 .5z"/></svg>
+            github.com/Ozy-666/urlfilter
+          </a>
+        </div>
+
+      </div>
+    </div>
+  </section>
+
+  <!-- STACK / ARCHITECTURE -->
+  <section id="stack">
+    <div class="wrap">
+      <div class="sec-head">
+        <span class="tag">Architecture</span>
+        <h2>The resolution path</h2>
+        <p>A layered upstream chain — TLS terminates at the edge, recursion and DNSSEC happen locally, and every query reaches the public internet already encrypted.</p>
+        <div class="rule"></div>
+      </div>
+      <div class="chain">
+        <div class="chain-row">
+          <div class="node">
+            <div class="ni"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect width="20" height="14" x="2" y="3" rx="2"/><line x1="8" x2="16" y1="21" y2="21"/><line x1="12" x2="12" y1="17" y2="21"/></svg></div>
+            <div class="nn">Clients</div><div class="nd">DoH·DoT·DoQ</div>
+          </div>
+          <div class="arrow"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14"/><path d="m12 5 7 7-7 7"/></svg></div>
+          <div class="node sec">
+            <div class="ni"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 13c0 5-3.5 7.5-7.66 8.95a1 1 0 0 1-.67-.01C7.5 20.5 4 18 4 13V6a1 1 0 0 1 1-1c2 0 4.5-1.2 6.24-2.72a1.17 1.17 0 0 1 1.52 0C14.51 3.81 17 5 19 5a1 1 0 0 1 1 1z"/></svg></div>
+            <div class="nn">nginx</div><div class="nd">TLS edge</div>
+          </div>
+          <div class="arrow"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14"/><path d="m12 5 7 7-7 7"/></svg></div>
+          <div class="node">
+            <div class="ni"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect width="20" height="8" x="2" y="2" rx="2"/><rect width="20" height="8" x="2" y="14" rx="2"/><path d="M6 6h.01"/><path d="M6 18h.01"/></svg></div>
+            <div class="nn">AGH-edge</div><div class="nd">filter·cache</div>
+          </div>
+          <div class="arrow"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14"/><path d="m12 5 7 7-7 7"/></svg></div>
+          <div class="node sec">
+            <div class="ni"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="3"/><path d="M12 2v4M12 18v4M2 12h4M18 12h4"/></svg></div>
+            <div class="nn">Unbound</div><div class="nd">DNSSEC·BoringSSL</div>
+          </div>
+          <div class="arrow"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14"/><path d="m12 5 7 7-7 7"/></svg></div>
+          <div class="node sec">
+            <div class="ni"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect width="18" height="11" x="3" y="11" rx="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg></div>
+            <div class="nn">dnscrypt</div><div class="nd">encrypted out</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- NUMBERS -->
+  <section id="numbers">
+    <div class="wrap">
+      <div class="sec-head">
+        <span class="tag">Measured, not claimed</span>
+        <h2>Profile-driven results</h2>
+        <p>Selected wins, each backed by a benchmark on production EPYC 7542 hardware. Full methodology and the honest rejections live in the spec.</p>
+        <div class="rule"></div>
+      </div>
+      <div class="nums">
+        <div class="num"><div class="v">−<b>167</b>×</div><div class="k">Domain-match cache miss<br>350 µs → 2.1 µs</div></div>
+        <div class="num"><div class="v">−<b>26</b>%</div><div class="k">Resolver latency<br>BoringSSL substrate</div></div>
+        <div class="num"><div class="v">+<b>60</b>%</div><div class="k">Throughput<br>front-cache enabled</div></div>
+        <div class="num"><div class="v">−<b>99.5</b>%</div><div class="k">Mutex-wait delay<br>serve-path lock trilogy</div></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- CRYPTO SUBSTRATE HIGHLIGHT -->
+  <section id="crypto">
+    <div class="wrap">
+      <div class="flagship" style="border-color:rgba(52,211,153,.2)">
+        <div class="flagship-in" style="grid-template-columns:1fr 1fr">
+          <div>
+            <span class="tag" style="color:var(--emerald)">§6.6 · Cryptographic substrate</span>
+            <h3 style="margin-top:12px">Unbound on <span style="color:var(--emerald)">BoringSSL</span></h3>
+            <p>Under a 100%-signed cache-miss flood, ECDSA-P256 verification consumed ~46% of Unbound's on-CPU time. Swapping the system OpenSSL substrate for Google's BoringSSL — with formally-verified field arithmetic (fiat-crypto) and zero provider-dispatch overhead — and pinning it statically into Unbound moved the needle, with a one-command rollback kept on standby.</p>
+            <a href="https://github.com/Ozy-666/AdGuardHome-edge-spec#66-cryptographic-substrate--unbound-on-boringssl" class="btn btn-ghost" style="border-color:rgba(52,211,153,.3);color:var(--emerald)!important">
+              Read §6.6
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M7 17 17 7"/><path d="M7 7h10v10"/></svg>
+            </a>
+          </div>
+          <div class="stat-col">
+            <div class="stat"><div class="n" style="color:var(--emerald)">+9.6%</div><div class="l">Throughput · signed-miss</div></div>
+            <div class="stat"><div class="n" style="color:var(--emerald)">12.8 → 9.5 ms</div><div class="l">Average latency</div></div>
+            <div class="stat"><div class="n" style="color:var(--emerald)">−14%</div><div class="l">libcrypto CPU self-time</div></div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- PRINCIPLES -->
+  <section id="principles">
+    <div class="wrap">
+      <div class="sec-head">
+        <span class="tag">How I work</span>
+        <h2>Engineering discipline</h2>
+        <div class="rule"></div>
+      </div>
+      <div class="principles">
+        <div class="pr">
+          <div class="pi"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 3v16a2 2 0 0 0 2 2h16"/><path d="m19 9-5 5-4-4-3 3"/></svg></div>
+          <div><h4>Verify on real CPUs</h4><p>Every lock removed and every allocation eliminated is proven by pprof and benchstat — measured on production EPYC hardware, never a laptop or a synthetic rig.</p></div>
+        </div>
+        <div class="pr">
+          <div class="pi"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/><path d="m9 12 2 2 4-4"/></svg></div>
+          <div><h4>Honest reporting</h4><p>Rejected optimizations are documented with evidence right alongside the wins. A +3% that wasn't worth it is written down too.</p></div>
+        </div>
+        <div class="pr">
+          <div class="pi"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 13c0 5-3.5 7.5-7.66 8.95a1 1 0 0 1-.67-.01C7.5 20.5 4 18 4 13V6a1 1 0 0 1 1-1c2 0 4.5-1.2 6.24-2.72a1.17 1.17 0 0 1 1.52 0C14.51 3.81 17 5 19 5a1 1 0 0 1 1 1z"/></svg></div>
+          <div><h4>Defense in depth</h4><p>Impossible-by-construction invariants (a valid DNS name has no spaces) double as attack detectors and forensic tripwires.</p></div>
+        </div>
+        <div class="pr">
+          <div class="pi"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 12a9 9 0 1 0 9-9 9.75 9.75 0 0 0-6.74 2.74L3 8"/><path d="M3 3v5h5"/></svg></div>
+          <div><h4>Reversibility</h4><p>Every change is feature-flagged or one-command revertible — from a pooled-connection toggle to a full OpenSSL fallback for the resolver.</p></div>
+        </div>
+      </div>
+    </div>
+  </section>
+</main>
+
+<footer>
+  <div class="wrap">
+    <div class="foot">
+      <div class="foot-l">
+        <span class="logo" style="width:30px;height:30px;display:grid;place-items:center;border:1px solid rgba(34,211,238,.3);border-radius:8px;background:rgba(34,211,238,.08);color:var(--cyan)">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 13c0 5-3.5 7.5-7.66 8.95a1 1 0 0 1-.67-.01C7.5 20.5 4 18 4 13V6a1 1 0 0 1 1-1c2 0 4.5-1.2 6.24-2.72a1.17 1.17 0 0 1 1.52 0C14.51 3.81 17 5 19 5a1 1 0 0 1 1 1z"/><path d="m9 12 2 2 4-4"/></svg>
+        </span>
+        Ozy-666
+      </div>
+      <div class="foot-links">
+        <a href="https://dnsdoh.art/">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><path d="M2 12h20"/><path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"/></svg>
+          DNSDOH.ART
+        </a>
+        <a href="https://github.com/Ozy-666" rel="me">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor"><path d="M12 .5C5.7.5.5 5.7.5 12c0 5.1 3.3 9.4 7.9 10.9.6.1.8-.2.8-.5v-2c-3.2.7-3.9-1.4-3.9-1.4-.5-1.3-1.3-1.7-1.3-1.7-1-.7.1-.7.1-.7 1.2.1 1.8 1.2 1.8 1.2 1 1.8 2.8 1.3 3.5 1 .1-.8.4-1.3.7-1.6-2.6-.3-5.3-1.3-5.3-5.7 0-1.3.5-2.3 1.2-3.1-.1-.3-.5-1.5.1-3.1 0 0 1-.3 3.3 1.2a11.5 11.5 0 0 1 6 0C17.3 4.7 18.3 5 18.3 5c.6 1.6.2 2.8.1 3.1.8.8 1.2 1.8 1.2 3.1 0 4.4-2.7 5.4-5.3 5.7.4.4.8 1.1.8 2.2v3.3c0 .3.2.6.8.5 4.6-1.5 7.9-5.8 7.9-10.9C23.5 5.7 18.3.5 12 .5z"/></svg>
+          GitHub
+        </a>
+      </div>
+    </div>
+    <div class="foot-note">
+      Author of <a href="https://github.com/Ozy-666/AdGuardHome-edge-spec">AdGuardHome-edge</a> ·
+      <a href="https://github.com/Ozy-666/dnsproxy">dnsproxy</a> ·
+      <a href="https://github.com/Ozy-666/dnscrypt-proxy">dnscrypt-proxy</a> ·
+      <a href="https://github.com/Ozy-666/urlfilter">urlfilter</a><br>
+      Building zero-telemetry encrypted DNS. Everything here is open, measured, and running in production at <a href="https://dnsdoh.art/">dnsdoh.art</a>.
+    </div>
+  </div>
+</footer>
 
 </body>
 </html>
