@@ -390,7 +390,7 @@
         <div class="card">
           <div class="ico"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><path d="M14 2v6h6"/><path d="M16 13H8"/><path d="M16 17H8"/><path d="M10 9H8"/></svg></div>
           <h3>AdGuardHome-edge</h3>
-          <p>The brain of the service. I took AdGuard Home and stripped out everything that leaks data or wastes time, then rebuilt the busy parts to barely touch memory. <span class="tech">~13k lines removed; zero-allocation request path.</span></p>
+          <p>The brain of the service. I stripped ~13k lines of anything that leaks data or wastes time (DHCP, cloud lookups, client-subnet), rebuilt the request pipeline to allocate nothing, and made the hot paths lock-free so it holds up under flood. A built-in front cache means most repeat lookups never travel further than this box. <span class="tech">0-alloc pipeline · lock-free serve path · front-cache +60% · −13k LOC.</span></p>
           <div class="metric"><span class="big">24.6 MB</span><span class="what">leaner build · −10 MB of bloat</span></div>
           <a class="gh" href="https://github.com/Ozy-666/AdGuardHome-edge-spec">github.com/Ozy-666/AdGuardHome-edge-spec</a>
         </div>
@@ -398,7 +398,7 @@
         <div class="card">
           <div class="ico"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect width="20" height="8" x="2" y="2" rx="2"/><rect width="20" height="8" x="2" y="14" rx="2"/><path d="M6 6h.01"/><path d="M6 18h.01"/></svg></div>
           <h3>dnsproxy</h3>
-          <p>How requests travel in and out. I taught it to reuse connections and spread work across all CPU cores, so it stays fast even when thousands of people use it at once. <span class="tech">Pooled connections · SO_REUSEPORT sharding.</span></p>
+          <p>How requests travel in and out. I rebuilt the UDP and TCP paths to allocate nothing, made upstream timing lock-free, and pooled connections instead of reopening one per query — then spread the listener across every CPU core. It also caps QUIC streams and DoH request sizes so a single client can't exhaust it. <span class="tech">0 allocs/op · lock-free RTT map · SO_REUSEPORT · flood caps.</span></p>
           <div class="metric"><span class="big">+101%</span><span class="what">more traffic handled under load</span></div>
           <a class="gh" href="https://github.com/Ozy-666/dnsproxy">github.com/Ozy-666/dnsproxy</a>
         </div>
@@ -414,7 +414,7 @@
         <div class="card">
           <div class="ico"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polygon points="22 3 2 3 10 12.46 10 19 14 21 14 12.46 22 3"/></svg></div>
           <h3>urlfilter</h3>
-          <p>The list-matcher that decides what's an ad or tracker. I reorganized how it searches its rules so even the trickiest ones are found instantly instead of slowing things down. <span class="tech">AST literal indexing for regex rules.</span></p>
+          <p>The list-matcher that decides what's an ad or tracker. I changed how it indexes its trickiest rules (regular expressions) so they're found instantly instead of scanned one by one — closing a path attackers could use to slow it down with floods of fake subdomains. The lookup allocates nothing, and I verified the rebuilt engine returns identical results to the original across 39,983 real domains plus 130,000 fuzz runs. <span class="tech">O(1) regex matching · 0 allocs · 0 divergences verified.</span></p>
           <div class="metric"><span class="big">248×</span><span class="what">faster matching under attack</span></div>
           <a class="gh" href="https://github.com/Ozy-666/urlfilter">github.com/Ozy-666/urlfilter</a>
         </div>
