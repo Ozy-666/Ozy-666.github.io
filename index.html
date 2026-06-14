@@ -5,7 +5,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
 <title>Ozy-666 — Private, Ad-Blocking Encrypted DNS (DoH/DoT/DoQ)</title>
-<meta name="description" content="I'm Ozy-666. I build and run DNSDOH.ART — an encrypted, no-logs DNS resolver that blocks ads & trackers and keeps your browsing private (DoH, DoT, DoQ, HTTP/3). A hobby project, open to everyone.">
+<meta name="description" content="I'm Ozy-666. I build and run DNSDOH.ART — an encrypted, no-logs DNS resolver that blocks ads & trackers and keeps your browsing private (DoH, DoT, DoQ, HTTP/3). A personal project, open to everyone.">
 <meta name="keywords" content="Ozy-666, encrypted DNS, private DNS, no-logs DNS, ad-blocking DNS, DNS over HTTPS, DoH, DoT, DoQ, public DNS resolver, AdGuardHome-edge, DNSDOH.ART">
 <meta name="author" content="Ozy-666">
 <meta name="robots" content="index, follow">
@@ -13,14 +13,14 @@
 
 <meta property="og:type" content="profile">
 <meta property="og:title" content="Ozy-666 — Private, Ad-Blocking Encrypted DNS (DoH/DoT/DoQ)">
-<meta property="og:description" content="I build and run DNSDOH.ART — an encrypted, no-logs DNS resolver that blocks ads & trackers and keeps your browsing private. A hobby project, open to everyone.">
+<meta property="og:description" content="I build and run DNSDOH.ART — an encrypted, no-logs DNS resolver that blocks ads & trackers and keeps your browsing private. A personal project, open to everyone.">
 <meta property="og:url" content="https://ozy-666.github.io/">
 <meta property="og:image" content="https://dnsdoh.art/assets/img/dnsdoh.art-logo-schema.png">
 <meta name="twitter:card" content="summary_large_image">
 <meta name="twitter:image" content="https://dnsdoh.art/assets/img/dnsdoh.art-logo-schema.png">
 
-<meta name="theme-color" content="#06b6d4">
-<meta name="color-scheme" content="dark">
+<meta name="theme-color" content="#f4f1e8">
+<meta name="color-scheme" content="light">
 
 <script type="application/ld+json">
 {
@@ -68,490 +68,286 @@
 
 <style>
   :root{
-    --bg:#04070e; --bg2:#020617;
-    --panel:rgba(15,23,42,.55); --panel-solid:#0b1220;
-    --border:#1e293b; --border-soft:rgba(30,41,59,.7);
-    --text:#cbd5e1; --head:#f1f5f9; --muted:#64748b; --muted2:#475569;
-    --cyan:#22d3ee; --cyan-deep:#06b6d4; --emerald:#34d399; --amber:#fbbf24;
-    --mono:"JetBrains Mono",ui-monospace,SFMono-Regular,"SF Mono",Menlo,Consolas,monospace;
-    --sans:"Inter",system-ui,-apple-system,"Segoe UI",Roboto,Helvetica,Arial,sans-serif;
+    --paper:#f4f1e8; --panel:#fbf9f3; --ink:#1a1712; --ink2:#403a30;
+    --faded:#86806f; --rule:#d8d1be; --rule2:#c3bba4;
+    --accent:#9c3b1f;   /* brick stamp */
+    --good:#2f5d4a;     /* verified green */
+    --mono:"JetBrains Mono",ui-monospace,SFMono-Regular,"SF Mono",Menlo,Consolas,"DejaVu Sans Mono",monospace;
   }
   *{box-sizing:border-box;margin:0;padding:0}
-  html{scroll-behavior:smooth;-webkit-text-size-adjust:100%}
+  html{-webkit-text-size-adjust:100%;scroll-behavior:smooth}
   body{
-    background:var(--bg); color:var(--text); font-family:var(--sans);
-    line-height:1.6; font-size:16px; overflow-x:hidden;
-    -webkit-font-smoothing:antialiased;
-    background-image:
-      radial-gradient(60rem 40rem at 75% -10%, rgba(6,182,212,.10), transparent 60%),
-      radial-gradient(50rem 40rem at 0% 10%, rgba(99,102,241,.06), transparent 55%);
-    background-attachment:fixed;
+    background:var(--paper); color:var(--ink); font-family:var(--mono);
+    font-size:14px; line-height:1.72; -webkit-font-smoothing:antialiased;
+    background-image:linear-gradient(var(--paper),var(--paper)),
+      repeating-linear-gradient(0deg, transparent, transparent 27px, rgba(140,120,80,.05) 27px, rgba(140,120,80,.05) 28px);
   }
-  ::selection{background:rgba(34,211,238,.25);color:#a5f3fc}
-  ::-webkit-scrollbar{width:8px;height:8px}
-  ::-webkit-scrollbar-track{background:var(--bg2)}
-  ::-webkit-scrollbar-thumb{background:#1e293b;border-radius:4px}
-  ::-webkit-scrollbar-thumb:hover{background:var(--cyan-deep)}
-  a{color:inherit;text-decoration:none}
+  ::selection{background:#e7c9bd;color:#3a160c}
+  ::-webkit-scrollbar{width:10px}::-webkit-scrollbar-track{background:var(--paper)}
+  ::-webkit-scrollbar-thumb{background:var(--rule2);border:2px solid var(--paper)}
+  a{color:var(--accent);text-decoration:none}
+  a:hover{text-decoration:underline}
   svg{display:block}
-  .wrap{max-width:1080px;margin:0 auto;padding:0 24px}
+  .wrap{max-width:820px;margin:0 auto;padding:0 28px}
 
-  .grid-bg{
-    position:fixed;inset:0;z-index:-1;pointer-events:none;opacity:.5;
-    background-image:
-      linear-gradient(to right, rgba(34,211,238,.035) 1px, transparent 1px),
-      linear-gradient(to bottom, rgba(34,211,238,.035) 1px, transparent 1px);
-    background-size:44px 44px;
-    mask-image:radial-gradient(ellipse 100% 60% at 50% 0%, #000 30%, transparent 80%);
-  }
+  /* masthead */
+  .mast{border-bottom:2px solid var(--ink);margin-top:34px}
+  .mast .row{display:flex;justify-content:space-between;align-items:flex-end;flex-wrap:wrap;gap:10px;padding-bottom:8px}
+  .mast .id{font-size:13px;letter-spacing:.32em;text-transform:uppercase;font-weight:700}
+  .mast .meta{font-size:11px;letter-spacing:.12em;text-transform:uppercase;color:var(--faded);text-align:right;line-height:1.5}
+  .subrule{height:1px;background:var(--ink);margin-top:3px}
 
-  .tag{font-family:var(--mono);font-size:11px;letter-spacing:.22em;text-transform:uppercase;color:var(--cyan);font-weight:600}
+  /* abstract / title block */
+  .abs{padding:46px 0 36px;border-bottom:1px solid var(--rule)}
+  .stamp{display:inline-block;border:1px solid var(--accent);color:var(--accent);
+    font-size:10.5px;letter-spacing:.16em;text-transform:uppercase;padding:4px 10px;margin-bottom:24px;
+    transform:rotate(-.6deg)}
+  h1{font-size:clamp(1.5rem,3.6vw,2.15rem);line-height:1.28;font-weight:700;letter-spacing:-.01em;max-width:18ch}
+  h1 .g{color:var(--accent)}
+  .lede{margin-top:20px;max-width:66ch;color:var(--ink2);font-size:13.5px;line-height:1.78}
+  .lede b{color:var(--ink);font-weight:700}
+  .links{margin-top:26px;display:flex;flex-wrap:wrap;gap:12px}
+  .lnk{border:1px solid var(--ink);padding:9px 15px;font-size:12px;letter-spacing:.04em;color:var(--ink);
+    display:inline-flex;align-items:center;gap:8px;transition:all .15s}
+  .lnk:hover{background:var(--ink);color:var(--paper);text-decoration:none}
+  .lnk.pri{background:var(--accent);border-color:var(--accent);color:#fff}
+  .lnk.pri:hover{background:#7e2c14}
 
-  header{position:sticky;top:0;z-index:50;backdrop-filter:blur(10px);
-    background:rgba(4,7,14,.78);border-bottom:1px solid var(--border-soft)}
-  nav{display:flex;align-items:center;justify-content:space-between;height:62px}
-  .brand{display:flex;align-items:center;gap:11px;font-family:var(--mono);font-weight:700;color:var(--head);letter-spacing:.02em}
-  .brand .logo{width:34px;height:34px;display:grid;place-items:center;border:1px solid rgba(34,211,238,.3);
-    border-radius:9px;background:rgba(34,211,238,.08);color:var(--cyan)}
-  .brand b{color:var(--cyan)}
-  .nav-links{display:flex;align-items:center;gap:26px;font-family:var(--mono);font-size:12.5px;letter-spacing:.04em}
-  .nav-links a{color:var(--muted);transition:color .2s}
-  .nav-links a:hover{color:var(--cyan)}
-  .nav-cta{display:inline-flex;align-items:center;gap:7px;padding:8px 15px;border-radius:8px;
-    border:1px solid rgba(34,211,238,.35);background:rgba(34,211,238,.08);color:var(--cyan)!important;font-weight:600;
-    transition:all .2s}
-  .nav-cta:hover{background:rgba(34,211,238,.16);box-shadow:0 0 22px rgba(6,182,212,.25)}
-  @media(max-width:680px){.nav-links a:not(.nav-cta){display:none}}
+  /* sections */
+  section{padding:40px 0;border-bottom:1px solid var(--rule)}
+  .sec-h{display:flex;align-items:baseline;gap:14px;margin-bottom:8px}
+  .sec-n{color:var(--accent);font-weight:700;font-size:13px;flex:0 0 auto}
+  .sec-h h2{font-size:1.05rem;font-weight:700;letter-spacing:.01em}
+  .sec-lead{color:var(--ink2);font-size:13px;max-width:70ch;margin:6px 0 26px;line-height:1.72}
+  .eyebrow{font-size:10.5px;letter-spacing:.22em;text-transform:uppercase;color:var(--faded);margin-bottom:16px}
 
-  .hero{padding:58px 0 42px;position:relative}
-  .pill{display:inline-flex;align-items:center;gap:9px;padding:6px 14px;border-radius:999px;
-    border:1px solid rgba(34,211,238,.25);background:rgba(2,6,23,.6);margin-bottom:22px;
-    font-family:var(--mono);font-size:11px;letter-spacing:.16em;text-transform:uppercase;color:var(--cyan)}
-  .dot{width:7px;height:7px;border-radius:50%;background:var(--emerald);
-    animation:ping 2s cubic-bezier(0,0,.2,1) infinite}
-  @keyframes ping{0%{box-shadow:0 0 0 0 rgba(52,211,153,.5)}70%,100%{box-shadow:0 0 0 8px rgba(52,211,153,0)}}
-  h1{font-size:clamp(1.85rem,3.6vw,2.65rem);line-height:1.1;font-weight:750;color:var(--head);letter-spacing:-.015em;margin-bottom:16px}
-  h1 .grad{background:linear-gradient(110deg,var(--cyan),#818cf8 70%);-webkit-background-clip:text;background-clip:text;color:transparent}
-  .lede{font-size:clamp(1rem,1.6vw,1.12rem);color:#94a3b8;max-width:640px;font-weight:300;line-height:1.6}
-  .lede b{color:var(--head);font-weight:500}
-  .hero-cta{display:flex;flex-wrap:wrap;gap:14px;margin-top:36px}
-  .btn{display:inline-flex;align-items:center;gap:9px;padding:14px 24px;border-radius:10px;font-weight:600;
-    font-size:15px;transition:all .2s;font-family:var(--sans)}
-  .btn-primary{background:var(--cyan-deep);color:#04070e!important;box-shadow:0 0 26px rgba(6,182,212,.3)}
-  .btn-primary:hover{background:var(--cyan);transform:translateY(-2px);box-shadow:0 6px 30px rgba(6,182,212,.4)}
-  .btn-ghost{border:1px solid var(--border);color:var(--text)!important;background:rgba(15,23,42,.4)}
-  .btn-ghost:hover{border-color:rgba(34,211,238,.5);color:var(--cyan)!important}
-  .hero-note{margin-top:18px;font-size:13.5px;color:var(--muted)}
+  /* generic bordered cell grid (benefits) */
+  .cells{display:grid;grid-template-columns:1fr 1fr;border:1px solid var(--rule2);border-bottom:none}
+  @media(max-width:640px){.cells{grid-template-columns:1fr}}
+  .cell{border-bottom:1px solid var(--rule2);padding:20px 22px}
+  .cell:nth-child(odd){border-right:1px solid var(--rule2)}
+  @media(max-width:640px){.cell:nth-child(odd){border-right:none}}
+  .cell h3{font-size:13px;font-weight:700;margin-bottom:8px;display:flex;align-items:center;gap:9px}
+  .cell h3::before{content:"▸";color:var(--accent)}
+  .cell p{font-size:12.5px;color:var(--ink2);line-height:1.7}
+  .cell.good h3::before{color:var(--good)}
 
-  section{padding:54px 0;position:relative}
-  .sec-head{margin-bottom:34px;max-width:660px}
-  .sec-head h2{font-size:clamp(1.7rem,3.6vw,2.2rem);color:var(--head);font-weight:700;letter-spacing:-.01em;margin:10px 0 10px}
-  .sec-head p{color:#94a3b8;font-size:15.5px}
-  .rule{height:1px;background:linear-gradient(90deg,var(--border),transparent);margin-top:20px}
+  /* how-to note */
+  .note{margin-top:22px;border-left:3px solid var(--accent);background:var(--panel);padding:16px 20px;
+    display:flex;gap:18px;flex-wrap:wrap;align-items:center;justify-content:space-between}
+  .note p{font-size:12.5px;color:var(--ink2);max-width:60ch}
+  .note p b{color:var(--ink)}
 
-  .grid{display:grid;grid-template-columns:repeat(2,1fr);gap:18px}
-  @media(max-width:720px){.grid{grid-template-columns:1fr}}
-  .ben{border:1px solid var(--border);border-radius:14px;padding:26px;background:var(--panel);transition:border-color .2s,transform .2s}
-  .ben:hover{border-color:rgba(34,211,238,.35);transform:translateY(-2px)}
-  .ben .bi{width:46px;height:46px;border-radius:11px;display:grid;place-items:center;margin-bottom:16px;
-    background:rgba(34,211,238,.08);border:1px solid rgba(34,211,238,.22);color:var(--cyan)}
-  .ben.g .bi{background:rgba(52,211,153,.08);border-color:rgba(52,211,153,.22);color:var(--emerald)}
-  .ben h3{font-size:18px;color:var(--head);font-weight:650;margin-bottom:7px}
-  .ben p{font-size:14.5px;color:#94a3b8}
+  /* measurements table */
+  table{width:100%;border-collapse:collapse;font-size:12.5px}
+  .meas td{border-top:1px solid var(--rule2);padding:13px 10px;vertical-align:baseline}
+  .meas tr:first-child td{border-top:1px solid var(--ink)}
+  .meas tr:last-child td{border-bottom:1px solid var(--ink)}
+  .meas .lbl{color:var(--ink2);width:42%}
+  .meas .val{color:var(--accent);font-weight:700;font-size:15px;width:18%;white-space:nowrap}
+  .meas .note2{color:var(--faded);font-size:11.5px}
 
-  .howto{margin-top:22px;display:flex;align-items:center;gap:16px;flex-wrap:wrap;
-    border:1px dashed var(--border);border-radius:13px;padding:18px 22px;background:rgba(2,6,23,.4)}
-  .howto p{font-size:14.5px;color:#94a3b8;flex:1;min-width:230px}
-  .howto p b{color:var(--head);font-weight:600}
+  /* spec entries (engine components) */
+  .spec{border-top:1px solid var(--ink)}
+  .entry{border-bottom:1px solid var(--rule2);padding:20px 0}
+  .entry-h{display:flex;justify-content:space-between;align-items:baseline;gap:14px;flex-wrap:wrap}
+  .entry-n{font-weight:700;font-size:13.5px}
+  .entry-n .ix{color:var(--accent);margin-right:10px}
+  .entry-m{color:var(--good);font-weight:700;font-size:13px;white-space:nowrap}
+  .entry-b{font-size:12.5px;color:var(--ink2);margin:9px 0 8px;line-height:1.72;max-width:78ch}
+  .entry-t{font-size:11px;color:var(--faded);letter-spacing:.02em}
+  .entry-r{font-size:11.5px;margin-top:8px;display:inline-block}
 
-  .nums{display:grid;grid-template-columns:repeat(3,1fr);gap:16px}
-  @media(max-width:680px){.nums{grid-template-columns:1fr}}
-  .num{border:1px solid var(--border);border-radius:13px;padding:26px 22px;background:var(--panel);text-align:center}
-  .num .v{font-family:var(--mono);font-size:1.9rem;font-weight:800;color:var(--head);line-height:1;letter-spacing:-.02em}
-  .num .v b{color:var(--cyan)}
-  .num .k{font-size:14px;color:#94a3b8;margin-top:11px;line-height:1.45}
-  .num .k b{color:var(--head);font-weight:600}
+  /* request path */
+  .path{display:flex;flex-wrap:wrap;gap:8px;align-items:stretch}
+  .step{flex:1;min-width:120px;border:1px solid var(--rule2);background:var(--panel);padding:13px 12px}
+  .step .sn{font-size:12px;font-weight:700}
+  .step .sd{font-size:10.5px;color:var(--faded);margin-top:3px;letter-spacing:.02em}
+  .step .si{color:var(--accent);font-weight:700;font-size:11px}
 
-  .flagship{border:1px solid rgba(34,211,238,.22);border-radius:18px;overflow:hidden;
-    background:linear-gradient(160deg,rgba(8,47,73,.5),rgba(2,6,23,.6));position:relative}
-  .flagship::before{content:"";position:absolute;inset:0;pointer-events:none;
-    background:radial-gradient(40rem 20rem at 80% 0%,rgba(6,182,212,.14),transparent 60%)}
-  .flagship-in{position:relative;padding:42px;display:grid;grid-template-columns:1.25fr 1fr;gap:36px;align-items:center}
-  @media(max-width:760px){.flagship-in{grid-template-columns:1fr;padding:30px 26px;gap:26px}}
-  .flagship h3{font-size:1.8rem;color:var(--head);font-weight:700;margin:14px 0 12px;letter-spacing:-.01em}
-  .flagship h3 b{color:var(--cyan)}
-  .flagship p{color:#94a3b8;font-size:15.5px;margin-bottom:22px}
-  .chips{display:flex;flex-wrap:wrap;gap:8px;margin-bottom:26px}
-  .chip{font-family:var(--mono);font-size:11px;padding:5px 11px;border-radius:7px;border:1px solid var(--border);
-    background:rgba(2,6,23,.5);color:#7dd3fc;letter-spacing:.03em}
-  .stat-col{display:grid;gap:14px}
-  .stat{border:1px solid var(--border-soft);border-radius:12px;padding:16px 18px;background:rgba(2,6,23,.45)}
-  .stat .n{font-family:var(--mono);font-size:1.4rem;font-weight:700;color:var(--head);line-height:1}
-  .stat .n b{color:var(--cyan)}
-  .stat .l{font-family:var(--mono);font-size:10.5px;letter-spacing:.1em;text-transform:uppercase;color:var(--muted);margin-top:7px}
+  /* comparison */
+  .cmp2{display:grid;grid-template-columns:1fr 1fr;gap:0;border:1px solid var(--rule2)}
+  @media(max-width:640px){.cmp2{grid-template-columns:1fr}}
+  .cmpcol{padding:20px 22px}
+  .cmpcol:first-child{border-right:1px solid var(--rule2)}
+  @media(max-width:640px){.cmpcol:first-child{border-right:none;border-bottom:1px solid var(--rule2)}}
+  .cmpcol.this{background:var(--panel)}
+  .cmpcol h4{font-size:11px;letter-spacing:.14em;text-transform:uppercase;margin-bottom:11px;color:var(--faded)}
+  .cmpcol.this h4{color:var(--accent)}
+  .cmpcol p{font-size:12.5px;color:var(--ink2);line-height:1.72}
+  .cmpcol p b{color:var(--ink)}
 
-  .card{border:1px solid var(--border);border-radius:14px;padding:24px;background:var(--panel);
-    transition:transform .2s,border-color .2s,box-shadow .2s;display:flex;flex-direction:column}
-  .card:hover{transform:translateY(-3px);border-color:rgba(34,211,238,.4);box-shadow:0 10px 40px -12px rgba(6,182,212,.25)}
-  .card .ico{width:42px;height:42px;border-radius:10px;display:grid;place-items:center;
-    border:1px solid rgba(34,211,238,.22);background:rgba(34,211,238,.07);color:var(--cyan);margin-bottom:16px}
-  .card h3{font-family:var(--mono);font-size:15px;color:var(--head);font-weight:700;margin-bottom:8px}
-  .card p{font-size:14px;color:#94a3b8;flex:1}
-  .card p .tech{color:#7dd3fc;font-family:var(--mono);font-size:12.5px}
-  .metric{margin-top:16px;padding-top:14px;border-top:1px solid var(--border-soft);display:flex;align-items:baseline;gap:10px}
-  .metric .big{font-family:var(--mono);font-weight:700;color:var(--emerald);font-size:1.05rem}
-  .metric .what{font-size:12px;color:var(--muted)}
-  .card .gh{margin-top:14px;font-family:var(--mono);font-size:12px;color:var(--cyan);display:inline-flex;align-items:center;gap:6px;opacity:.85;transition:opacity .2s;word-break:break-all}
-  .card:hover .gh{opacity:1}
+  /* principles */
+  .pr{display:grid;grid-template-columns:1fr 1fr;gap:0;border:1px solid var(--rule2);border-bottom:none}
+  @media(max-width:640px){.pr{grid-template-columns:1fr}}
+  .pr-i{border-bottom:1px solid var(--rule2);padding:18px 20px}
+  .pr-i:nth-child(odd){border-right:1px solid var(--rule2)}
+  @media(max-width:640px){.pr-i:nth-child(odd){border-right:none}}
+  .pr-i h4{font-size:12.5px;font-weight:700;margin-bottom:6px}
+  .pr-i h4 .ix{color:var(--accent);margin-right:8px}
+  .pr-i p{font-size:12px;color:var(--ink2);line-height:1.66}
 
-  .chain{border:1px solid var(--border);border-radius:16px;background:var(--panel);padding:30px 26px;overflow-x:auto}
-  .chain-row{display:flex;align-items:stretch;min-width:min-content}
-  .node{flex:1;min-width:118px;text-align:center;padding:18px 12px;border:1px solid var(--border-soft);border-radius:11px;background:rgba(2,6,23,.5)}
-  .node .ni{width:34px;height:34px;margin:0 auto 9px;display:grid;place-items:center;border-radius:8px;
-    background:rgba(34,211,238,.08);border:1px solid rgba(34,211,238,.2);color:var(--cyan)}
-  .node .nn{font-family:var(--mono);font-size:12px;color:var(--head);font-weight:600}
-  .node .nd{font-family:var(--mono);font-size:10px;color:var(--muted);margin-top:3px}
-  .node.sec .ni{color:var(--emerald);background:rgba(52,211,153,.08);border-color:rgba(52,211,153,.22)}
-  .arrow{display:flex;align-items:center;color:var(--muted2);padding:0 4px;flex:0 0 auto}
-  @media(max-width:720px){.chain-row{flex-direction:column}.arrow{transform:rotate(90deg);padding:8px 0;justify-content:center}.node{min-width:0}}
-
-  .compare{display:grid;grid-template-columns:1fr 1fr;gap:18px}
-  @media(max-width:680px){.compare{grid-template-columns:1fr}}
-  .cmp{border:1px solid var(--border);border-radius:14px;padding:26px;background:var(--panel)}
-  .cmp.accent{border-color:rgba(34,211,238,.3);background:linear-gradient(160deg,rgba(8,47,73,.4),rgba(2,6,23,.5))}
-  .cmp-h{display:flex;align-items:center;gap:10px;font-weight:650;color:var(--head);font-size:15.5px;margin-bottom:12px}
-  .cmp-h svg{color:var(--muted);flex:0 0 auto}
-  .cmp.accent .cmp-h svg{color:var(--cyan)}
-  .cmp p{font-size:14.5px;color:#94a3b8}
-  .cmp p b{color:var(--head);font-weight:600}
-  .principles{display:grid;grid-template-columns:repeat(2,1fr);gap:16px}
-  @media(max-width:680px){.principles{grid-template-columns:1fr}}
-  .pr{display:flex;gap:15px;padding:22px;border:1px solid var(--border);border-radius:13px;background:var(--panel)}
-  .pr .pi{flex:0 0 auto;width:40px;height:40px;border-radius:10px;display:grid;place-items:center;
-    background:rgba(34,211,238,.07);border:1px solid rgba(34,211,238,.2);color:var(--cyan)}
-  .pr h4{font-size:15px;color:var(--head);font-weight:600;margin-bottom:5px}
-  .pr p{font-size:13.5px;color:var(--muted)}
-
-  footer{border-top:1px solid var(--border-soft);padding:48px 0 60px;margin-top:30px}
-  .foot{display:flex;flex-wrap:wrap;justify-content:space-between;align-items:center;gap:24px}
-  .foot-l{display:flex;align-items:center;gap:11px;font-family:var(--mono);color:var(--muted);font-size:13px}
-  .foot-links{display:flex;gap:22px;font-family:var(--mono);font-size:13px}
-  .foot-links a{color:var(--muted);display:inline-flex;align-items:center;gap:7px;transition:color .2s}
-  .foot-links a:hover{color:var(--cyan)}
-  .foot-note{margin-top:26px;font-family:var(--mono);font-size:11.5px;color:var(--muted2);line-height:1.7}
-  .foot-note a{color:var(--muted)}.foot-note a:hover{color:var(--cyan)}
-
-  .rise{opacity:0;transform:translateY(16px);animation:rise .7s cubic-bezier(.2,.7,.2,1) forwards}
-  @keyframes rise{to{opacity:1;transform:none}}
-  .d1{animation-delay:.05s}.d2{animation-delay:.13s}.d3{animation-delay:.21s}.d4{animation-delay:.29s}
-  @media(prefers-reduced-motion:reduce){.rise{animation:none;opacity:1;transform:none}}
+  /* footer */
+  footer{padding:32px 0 60px}
+  .foot-id{font-size:13px;letter-spacing:.3em;text-transform:uppercase;font-weight:700;margin-bottom:10px}
+  .foot-links{display:flex;gap:18px;font-size:12px;margin-bottom:18px;flex-wrap:wrap}
+  .foot-note{font-size:11.5px;color:var(--faded);line-height:1.7;max-width:74ch}
+  .foot-note a{color:var(--ink2)}
 </style>
 </head>
 <body>
-<div class="grid-bg"></div>
 
-<header>
-  <div class="wrap">
-    <nav>
-      <a href="/" class="brand">
-        <span class="logo">
-          <svg width="19" height="19" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 13c0 5-3.5 7.5-7.66 8.95a1 1 0 0 1-.67-.01C7.5 20.5 4 18 4 13V6a1 1 0 0 1 1-1c2 0 4.5-1.2 6.24-2.72a1.17 1.17 0 0 1 1.52 0C14.51 3.81 17 5 19 5a1 1 0 0 1 1 1z"/><path d="m9 12 2 2 4-4"/></svg>
-        </span>
-        Ozy<b>-666</b>
-      </a>
-      <div class="nav-links">
-        <a href="#what">What I built</a>
-        <a href="#tech">Under the hood</a>
-        <a href="https://github.com/Ozy-666" rel="me">GitHub</a>
-        <a href="https://dnsdoh.art/" class="nav-cta">
-          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14"/><path d="m12 5 7 7-7 7"/></svg>
-          DNSDOH.ART
-        </a>
-      </div>
-    </nav>
+<div class="wrap">
+
+  <div class="mast">
+    <div class="row">
+      <div class="id">Ozy-666</div>
+      <div class="meta">DNS Infrastructure · Independent<br>Public specification — rev. 2026.06</div>
+    </div>
   </div>
-</header>
+  <div class="subrule"></div>
 
-<main>
-  <!-- HERO -->
-  <section class="hero">
-    <div class="wrap">
-      <div class="pill rise d1"><span class="dot"></span> A hobby project · open to everyone</div>
-      <h1 class="rise d2">I run a public DNS resolver<br><span class="grad">that keeps you private.</span></h1>
-      <p class="lede rise d3">Hi, I'm <b>Ozy-666</b>. Building and running <b>DNSDOH.ART</b> is my hobby — an encrypted DNS resolver that <b>blocks ads &amp; trackers</b> and keeps your lookups <b>private from your internet provider</b>. It costs nothing, the code is open, and there's no company or catch behind it. I'm not selling anything — I just think this should exist.</p>
-      <div class="hero-cta rise d4">
-        <a href="https://dnsdoh.art/" class="btn btn-primary">
-          <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 13c0 5-3.5 7.5-7.66 8.95a1 1 0 0 1-.67-.01C7.5 20.5 4 18 4 13V6a1 1 0 0 1 1-1c2 0 4.5-1.2 6.24-2.72a1.17 1.17 0 0 1 1.52 0C14.51 3.81 17 5 19 5a1 1 0 0 1 1 1z"/><path d="m9 12 2 2 4-4"/></svg>
-          Open DNSDOH.ART
-        </a>
-        <a href="#what" class="btn btn-ghost">How it works</a>
-      </div>
-      <p class="hero-note rise d4">Works on phones, computers, and routers — usually one setting. No account, no cost, no catch.</p>
+  <!-- ABSTRACT / TITLE -->
+  <div class="abs">
+    <span class="stamp">A personal project · open to everyone</span>
+    <h1>I run a public DNS resolver <span class="g">that keeps you private.</span></h1>
+    <p class="lede">Hi, I'm <b>Ozy-666</b>. Building and running <b>DNSDOH.ART</b> is a personal project — an encrypted DNS resolver that <b>blocks ads &amp; trackers</b> and keeps your lookups <b>private from your internet provider</b>. It costs nothing, the code is open, and there's no company or catch behind it. I'm not selling anything — I just think this should exist.</p>
+    <div class="links">
+      <a class="lnk pri" href="https://dnsdoh.art/">Open DNSDOH.ART →</a>
+      <a class="lnk" href="#s1">↓ How it works</a>
+    </div>
+  </div>
+
+  <!-- §1 -->
+  <section id="s1">
+    <div class="eyebrow">What is this?</div>
+    <div class="sec-h"><span class="sec-n">§1</span><h2>What it actually does</h2></div>
+    <p class="sec-lead">Every time you open a website, your device looks up its address — like a phone book for the internet. DNSDOH.ART does that lookup for you, but <b>privately</b> and <b>cleanly</b>. Here's what it does:</p>
+    <div class="cells">
+      <div class="cell"><h3>Blocks ads &amp; trackers</h3><p>Ads, trackers, and known malicious sites are stopped before they ever load — in <em>every</em> app on your device, not just your web browser.</p></div>
+      <div class="cell"><h3>Private by default</h3><p>Your lookups are encrypted, so your internet provider (or the café Wi-Fi) can't see which websites you visit or sell that history.</p></div>
+      <div class="cell"><h3>Often faster</h3><p>With less junk to download and answers served in a fraction of a millisecond, pages frequently feel snappier — not slower.</p></div>
+      <div class="cell good"><h3>No cost, no logs</h3><p>No account, no app on most devices, no cost — and nothing about your activity is recorded or stored. It runs entirely in memory.</p></div>
+    </div>
+    <div class="note">
+      <p><b>How do I use it?</b> Pick your device, copy one address into its DNS / "Private DNS" setting, and you're protected everywhere. The guides cover phones, laptops, and routers step by step.</p>
+      <a class="lnk" href="https://dnsdoh.art/setup.html">Set it up →</a>
     </div>
   </section>
 
-  <!-- WHAT YOU GET -->
-  <section id="what">
-    <div class="wrap">
-      <div class="sec-head">
-        <span class="tag">What is this?</span>
-        <h2>What it actually does</h2>
-        <p>Every time you open a website, your device looks up its address — like a phone book for the internet. DNSDOH.ART does that lookup for you, but <b>privately</b> and <b>cleanly</b>. Here's what it does:</p>
-        <div class="rule"></div>
-      </div>
-      <div class="grid">
-        <div class="ben">
-          <div class="bi"><svg width="23" height="23" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 13c0 5-3.5 7.5-7.66 8.95a1 1 0 0 1-.67-.01C7.5 20.5 4 18 4 13V6a1 1 0 0 1 1-1c2 0 4.5-1.2 6.24-2.72a1.17 1.17 0 0 1 1.52 0C14.51 3.81 17 5 19 5a1 1 0 0 1 1 1z"/><path d="m9 12 2 2 4-4"/></svg></div>
-          <h3>Blocks ads &amp; trackers</h3>
-          <p>Ads, trackers, and known malicious sites are stopped before they ever load — in <em>every</em> app on your device, not just your web browser.</p>
-        </div>
-        <div class="ben">
-          <div class="bi"><svg width="23" height="23" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9.88 9.88a3 3 0 1 0 4.24 4.24"/><path d="M10.73 5.08A10.43 10.43 0 0 1 12 5c7 0 10 7 10 7a13.16 13.16 0 0 1-1.67 2.68"/><path d="M6.61 6.61A13.526 13.526 0 0 0 2 12s3 7 10 7a9.74 9.74 0 0 0 5.39-1.61"/><line x1="2" x2="22" y1="2" y2="22"/></svg></div>
-          <h3>Private by default</h3>
-          <p>Your lookups are encrypted, so your internet provider (or the café Wi-Fi) can't see which websites you visit or sell that history.</p>
-        </div>
-        <div class="ben">
-          <div class="bi"><svg width="23" height="23" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 14a1 1 0 0 1-.78-1.63l9.9-10.2a.5.5 0 0 1 .86.46l-1.92 6.02A1 1 0 0 0 13 10h7a1 1 0 0 1 .78 1.63l-9.9 10.2a.5.5 0 0 1-.86-.46l1.92-6.02A1 1 0 0 0 11 14z"/></svg></div>
-          <h3>Often faster</h3>
-          <p>With less junk to download and answers served in a fraction of a millisecond, pages frequently feel snappier — not slower.</p>
-        </div>
-        <div class="ben g">
-          <div class="bi"><svg width="23" height="23" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="8" width="18" height="4" rx="1"/><path d="M12 8v13"/><path d="M19 12v7a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2v-7"/><path d="M7.5 8a2.5 2.5 0 0 1 0-5C11 3 12 8 12 8s1-5 4.5-5a2.5 2.5 0 0 1 0 5"/></svg></div>
-          <h3>No cost, no logs</h3>
-          <p>No account, no app on most devices, no cost — and nothing about your activity is recorded or stored. It runs entirely in memory.</p>
-        </div>
-      </div>
-      <div class="howto">
-        <p><b>How do I use it?</b> Pick your device, copy one address into its DNS / "Private DNS" setting, and you're protected everywhere. The guides cover phones, laptops, and routers step by step.</p>
-        <a href="https://dnsdoh.art/setup.html" class="btn btn-primary">
-          Set it up
-          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14"/><path d="m12 5 7 7-7 7"/></svg>
-        </a>
-      </div>
-    </div>
+  <!-- §2 -->
+  <section id="s2">
+    <div class="eyebrow">Built to be reliable</div>
+    <div class="sec-h"><span class="sec-n">§2</span><h2>Measurements — small, but steady under load</h2></div>
+    <p class="sec-lead">It runs on a single, carefully-tuned server — and stays steady even under heavy traffic, while keeping CPU and memory use low. The numbers below come from synthetic stress testing, well past everyday use.</p>
+    <table class="meas">
+      <tr><td class="lbl">Lookups per second</td><td class="val">8,000</td><td class="note2">sustained · ≈600× normal load</td></tr>
+      <tr><td class="lbl">Answered correctly</td><td class="val">100%</td><td class="note2">zero dropped under that load</td></tr>
+      <tr><td class="lbl">Logs kept</td><td class="val">0</td><td class="note2">memory-only, nothing saved</td></tr>
+    </table>
   </section>
 
-  <!-- NUMBERS -->
-  <section id="numbers">
-    <div class="wrap">
-      <div class="sec-head">
-        <span class="tag">Built to be reliable</span>
-        <h2>Small, but steady under load</h2>
-        <p>It runs on a single, carefully-tuned server — and stays steady even under heavy traffic, while keeping CPU and memory use low. The numbers below come from synthetic stress testing, well past everyday use.</p>
-        <div class="rule"></div>
-      </div>
-      <div class="nums">
-        <div class="num"><div class="v"><b>8,000</b>/s</div><div class="k"><b>Lookups per second</b><br>sustained · ≈600× normal load</div></div>
-        <div class="num"><div class="v"><b>100</b>%</div><div class="k"><b>Answered correctly</b><br>zero dropped under that load</div></div>
-        <div class="num"><div class="v"><b>0</b></div><div class="k"><b>Logs kept</b><br>memory-only, nothing saved</div></div>
-      </div>
-    </div>
+  <!-- §3 -->
+  <section id="s3">
+    <div class="eyebrow">The resolver</div>
+    <div class="sec-h"><span class="sec-n">§3</span><h2>DNSDOH.ART</h2></div>
+    <p class="sec-lead">This is the resolver itself: public, no-logs, and open-source. It works with every modern connection type, and you don't need any technical knowledge to point your device at it.</p>
+    <table class="meas">
+      <tr><td class="lbl">Cost</td><td class="val">None</td><td class="note2">no account · no app needed</td></tr>
+      <tr><td class="lbl">Logs kept</td><td class="val">0</td><td class="note2">nothing recorded, ever</td></tr>
+      <tr><td class="lbl">Transports</td><td class="val">DoH · DoT · DoQ · H3</td><td class="note2">phone · laptop · router</td></tr>
+    </table>
+    <div class="links" style="margin-top:22px"><a class="lnk pri" href="https://dnsdoh.art/">Visit DNSDOH.ART →</a></div>
   </section>
 
-  <!-- FLAGSHIP -->
-  <section id="flagship">
-    <div class="wrap">
-      <div class="flagship">
-        <div class="flagship-in">
-          <div>
-            <span class="tag">The resolver</span>
-            <h3>DNSDOH<b>.ART</b></h3>
-            <p>This is the resolver itself: public, no-logs, and open-source. It works with every modern connection type, and you don't need any technical knowledge to point your device at it.</p>
-            <div class="chips">
-              <span class="chip">Ad-blocking</span><span class="chip">No logs</span><span class="chip">DoH</span>
-              <span class="chip">DoT</span><span class="chip">DoQ</span><span class="chip">HTTP/3</span>
-            </div>
-            <a href="https://dnsdoh.art/" class="btn btn-primary">
-              Visit DNSDOH.ART
-              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M7 17 17 7"/><path d="M7 7h10v10"/></svg>
-            </a>
-          </div>
-          <div class="stat-col">
-            <div class="stat"><div class="n">No cost</div><div class="l">No account · no app needed</div></div>
-            <div class="stat"><div class="n"><b>0</b> logs</div><div class="l">Nothing recorded, ever</div></div>
-            <div class="stat"><div class="n">All devices</div><div class="l">Phone · laptop · router</div></div>
-          </div>
-        </div>
+  <!-- §4 -->
+  <section id="s4">
+    <div class="eyebrow">Under the hood</div>
+    <div class="sec-h"><span class="sec-n">§4</span><h2>The engine — I built it too</h2></div>
+    <p class="sec-lead">You don't need to read any of this to use the service — but if you're technical, here's the open-source work behind it. I rewrote the core DNS software to be faster and leaner, and every change is proven with real benchmarks (not guesses) before it ships.</p>
+    <div class="spec">
+      <div class="entry">
+        <div class="entry-h"><div class="entry-n"><span class="ix">4.1</span>AdGuardHome-edge</div><div class="entry-m">24.6 MB · −10 MB bloat</div></div>
+        <p class="entry-b">The brain of the service. I stripped ~13k lines of anything that leaks data or wastes time (DHCP, cloud lookups, client-subnet), rebuilt the request pipeline to allocate nothing, and made the hot paths lock-free so it holds up under flood. A built-in front cache means most repeat lookups never travel further than this box.</p>
+        <div class="entry-t">0-alloc pipeline · lock-free serve path · front-cache +60% · −13k LOC</div>
+        <a class="entry-r" href="https://github.com/Ozy-666/AdGuardHome-edge-spec">github.com/Ozy-666/AdGuardHome-edge-spec →</a>
+      </div>
+      <div class="entry">
+        <div class="entry-h"><div class="entry-n"><span class="ix">4.2</span>dnsproxy</div><div class="entry-m">+101% throughput</div></div>
+        <p class="entry-b">How requests travel in and out. I rebuilt the UDP and TCP paths to allocate nothing, made upstream timing lock-free, and pooled connections instead of reopening one per query — then spread the listener across every CPU core. It also caps QUIC streams and DoH request sizes so a single client can't exhaust it.</p>
+        <div class="entry-t">0 allocs/op · lock-free RTT map · SO_REUSEPORT · flood caps</div>
+        <a class="entry-r" href="https://github.com/Ozy-666/dnsproxy">github.com/Ozy-666/dnsproxy →</a>
+      </div>
+      <div class="entry">
+        <div class="entry-h"><div class="entry-n"><span class="ix">4.3</span>dnscrypt-proxy</div><div class="entry-m">0 vulnerabilities</div></div>
+        <p class="entry-b">The part that encrypts your DNS on its way out to the wider internet. I rebuilt its busy paths to allocate nothing, made server-selection lock-free, and stripped everything that phones home — the web UI, auto-updates, and remote list downloads. Then had it security-audited; it now rejects forged upstream replies too.</p>
+        <div class="entry-t">0 allocs/op · lock-free WP2 · −455 KB · audited</div>
+        <a class="entry-r" href="https://github.com/Ozy-666/dnscrypt-proxy">github.com/Ozy-666/dnscrypt-proxy →</a>
+      </div>
+      <div class="entry">
+        <div class="entry-h"><div class="entry-n"><span class="ix">4.4</span>urlfilter</div><div class="entry-m">248× faster</div></div>
+        <p class="entry-b">The list-matcher that decides what's an ad or tracker. I changed how it indexes its trickiest rules (regular expressions) so they're found instantly instead of scanned one by one — closing a path attackers could use to slow it down with floods of fake subdomains. The lookup allocates nothing, and I verified the rebuilt engine returns identical results to the original across 39,983 real domains plus 130,000 fuzz runs.</p>
+        <div class="entry-t">O(1) regex matching · 0 allocs · 0 divergences verified</div>
+        <a class="entry-r" href="https://github.com/Ozy-666/urlfilter">github.com/Ozy-666/urlfilter →</a>
+      </div>
+      <div class="entry">
+        <div class="entry-h"><div class="entry-n"><span class="ix">4.5</span>Unbound + BoringSSL</div><div class="entry-m">−26% latency · +9.6%</div></div>
+        <p class="entry-b">The resolver that finds each address and proves it's genuine. Checking those security signatures was eating nearly half the server's effort, so I rebuilt Unbound on Google's faster, formally-verified math library (BoringSSL) — keeping a one-command undo ready in case anything misbehaved.</p>
+        <div class="entry-t">Statically-linked BoringSSL · full DNSSEC validation</div>
+        <a class="entry-r" href="https://github.com/Ozy-666/AdGuardHome-edge-spec#66-cryptographic-substrate--unbound-on-boringssl">AdGuardHome-edge-spec · §6.6 Unbound×BoringSSL →</a>
       </div>
     </div>
   </section>
 
-  <!-- UNDER THE HOOD -->
-  <section id="tech">
-    <div class="wrap">
-      <div class="sec-head">
-        <span class="tag">Under the hood</span>
-        <h2>For the curious: I built the engine too</h2>
-        <p>You don't need to read any of this to use the service — but if you're technical, here's the open-source work behind it. I rewrote the core DNS software to be faster and leaner, and every change is proven with real benchmarks (not guesses) before it ships.</p>
-        <div class="rule"></div>
-      </div>
-      <div class="grid">
-
-        <div class="card">
-          <div class="ico"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><path d="M14 2v6h6"/><path d="M16 13H8"/><path d="M16 17H8"/><path d="M10 9H8"/></svg></div>
-          <h3>AdGuardHome-edge</h3>
-          <p>The brain of the service. I stripped ~13k lines of anything that leaks data or wastes time (DHCP, cloud lookups, client-subnet), rebuilt the request pipeline to allocate nothing, and made the hot paths lock-free so it holds up under flood. A built-in front cache means most repeat lookups never travel further than this box. <span class="tech">0-alloc pipeline · lock-free serve path · front-cache +60% · −13k LOC.</span></p>
-          <div class="metric"><span class="big">24.6 MB</span><span class="what">leaner build · −10 MB of bloat</span></div>
-          <a class="gh" href="https://github.com/Ozy-666/AdGuardHome-edge-spec">github.com/Ozy-666/AdGuardHome-edge-spec</a>
-        </div>
-
-        <div class="card">
-          <div class="ico"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect width="20" height="8" x="2" y="2" rx="2"/><rect width="20" height="8" x="2" y="14" rx="2"/><path d="M6 6h.01"/><path d="M6 18h.01"/></svg></div>
-          <h3>dnsproxy</h3>
-          <p>How requests travel in and out. I rebuilt the UDP and TCP paths to allocate nothing, made upstream timing lock-free, and pooled connections instead of reopening one per query — then spread the listener across every CPU core. It also caps QUIC streams and DoH request sizes so a single client can't exhaust it. <span class="tech">0 allocs/op · lock-free RTT map · SO_REUSEPORT · flood caps.</span></p>
-          <div class="metric"><span class="big">+101%</span><span class="what">more traffic handled under load</span></div>
-          <a class="gh" href="https://github.com/Ozy-666/dnsproxy">github.com/Ozy-666/dnsproxy</a>
-        </div>
-
-        <div class="card">
-          <div class="ico"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect width="18" height="11" x="3" y="11" rx="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg></div>
-          <h3>dnscrypt-proxy</h3>
-          <p>The part that encrypts your DNS on its way out to the wider internet. I rebuilt its busy paths to allocate nothing, made server-selection lock-free, and stripped everything that phones home — the web UI, auto-updates, and remote list downloads. Then had it security-audited; it now rejects forged upstream replies too. <span class="tech">0 allocs/op · lock-free WP2 · −455 KB · audited.</span></p>
-          <div class="metric"><span class="big">0</span><span class="what">known vulnerabilities after audit</span></div>
-          <a class="gh" href="https://github.com/Ozy-666/dnscrypt-proxy">github.com/Ozy-666/dnscrypt-proxy</a>
-        </div>
-
-        <div class="card">
-          <div class="ico"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polygon points="22 3 2 3 10 12.46 10 19 14 21 14 12.46 22 3"/></svg></div>
-          <h3>urlfilter</h3>
-          <p>The list-matcher that decides what's an ad or tracker. I changed how it indexes its trickiest rules (regular expressions) so they're found instantly instead of scanned one by one — closing a path attackers could use to slow it down with floods of fake subdomains. The lookup allocates nothing, and I verified the rebuilt engine returns identical results to the original across 39,983 real domains plus 130,000 fuzz runs. <span class="tech">O(1) regex matching · 0 allocs · 0 divergences verified.</span></p>
-          <div class="metric"><span class="big">248×</span><span class="what">faster matching under attack</span></div>
-          <a class="gh" href="https://github.com/Ozy-666/urlfilter">github.com/Ozy-666/urlfilter</a>
-        </div>
-
-        <div class="card" style="grid-column:1/-1">
-          <div class="ico"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="3"/><path d="M12 2v4M12 18v4M2 12h4M18 12h4M4.9 4.9l2.8 2.8M16.3 16.3l2.8 2.8M19.1 4.9l-2.8 2.8M7.7 16.3l-2.8 2.8"/></svg></div>
-          <h3>Unbound + BoringSSL</h3>
-          <p>The resolver that finds each address and proves it's genuine. Checking those security signatures was eating nearly half the server's effort, so I rebuilt Unbound on Google's faster, formally-verified math library (BoringSSL) — keeping a one-command undo ready in case anything misbehaved. <span class="tech">Statically-linked BoringSSL · full DNSSEC validation.</span></p>
-          <div class="metric"><span class="big">−26%</span><span class="what">less waiting per request · +9.6% more handled</span></div>
-          <a class="gh" href="https://github.com/Ozy-666/AdGuardHome-edge-spec#66-cryptographic-substrate--unbound-on-boringssl">AdGuardHome-edge-spec · §6.6 Unbound×BoringSSL</a>
-        </div>
-
-      </div>
+  <!-- §5 -->
+  <section id="s5">
+    <div class="eyebrow">The journey of a request</div>
+    <div class="sec-h"><span class="sec-n">§5</span><h2>Encrypted from start to finish</h2></div>
+    <p class="sec-lead">When you look up a website, your request stays protected the whole way — each step has one job, and your data never travels in the open.</p>
+    <div class="path">
+      <div class="step"><div class="sn">Your device</div><div class="sd">asks privately</div></div>
+      <div class="step"><div class="si">→</div><div class="sn">Secure door</div><div class="sd">decrypts safely</div></div>
+      <div class="step"><div class="si">→</div><div class="sn">Filter</div><div class="sd">blocks the junk</div></div>
+      <div class="step"><div class="si">→</div><div class="sn">Verify</div><div class="sd">checks it's genuine</div></div>
+      <div class="step"><div class="si">→</div><div class="sn">Encrypt out</div><div class="sd">private to the web</div></div>
     </div>
   </section>
 
-  <!-- ARCHITECTURE -->
-  <section id="path">
-    <div class="wrap">
-      <div class="sec-head">
-        <span class="tag">The journey of a request</span>
-        <h2>Encrypted from start to finish</h2>
-        <p>When you look up a website, your request stays protected the whole way — each step has one job, and your data never travels in the open.</p>
-        <div class="rule"></div>
-      </div>
-      <div class="chain">
-        <div class="chain-row">
-          <div class="node">
-            <div class="ni"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect width="20" height="14" x="2" y="3" rx="2"/><line x1="8" x2="16" y1="21" y2="21"/><line x1="12" x2="12" y1="17" y2="21"/></svg></div>
-            <div class="nn">Your device</div><div class="nd">asks privately</div>
-          </div>
-          <div class="arrow"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14"/><path d="m12 5 7 7-7 7"/></svg></div>
-          <div class="node sec">
-            <div class="ni"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 13c0 5-3.5 7.5-7.66 8.95a1 1 0 0 1-.67-.01C7.5 20.5 4 18 4 13V6a1 1 0 0 1 1-1c2 0 4.5-1.2 6.24-2.72a1.17 1.17 0 0 1 1.52 0C14.51 3.81 17 5 19 5a1 1 0 0 1 1 1z"/></svg></div>
-            <div class="nn">Secure door</div><div class="nd">decrypts safely</div>
-          </div>
-          <div class="arrow"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14"/><path d="m12 5 7 7-7 7"/></svg></div>
-          <div class="node">
-            <div class="ni"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect width="20" height="8" x="2" y="2" rx="2"/><rect width="20" height="8" x="2" y="14" rx="2"/><path d="M6 6h.01"/><path d="M6 18h.01"/></svg></div>
-            <div class="nn">Filter</div><div class="nd">blocks the junk</div>
-          </div>
-          <div class="arrow"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14"/><path d="m12 5 7 7-7 7"/></svg></div>
-          <div class="node sec">
-            <div class="ni"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="3"/><path d="M12 2v4M12 18v4M2 12h4M18 12h4"/></svg></div>
-            <div class="nn">Verify</div><div class="nd">checks it's genuine</div>
-          </div>
-          <div class="arrow"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14"/><path d="m12 5 7 7-7 7"/></svg></div>
-          <div class="node sec">
-            <div class="ni"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect width="18" height="11" x="3" y="11" rx="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg></div>
-            <div class="nn">Encrypt out</div><div class="nd">private to the web</div>
-          </div>
-        </div>
-      </div>
+  <!-- §6 -->
+  <section id="s6">
+    <div class="eyebrow">Being honest</div>
+    <div class="sec-h"><span class="sec-n">§6</span><h2>How this compares to the big resolvers</h2></div>
+    <p class="sec-lead">Cloudflare's 1.1.1.1 and Quad9 are the public resolvers most people know. They're genuinely excellent — and I'm not pretending to match them. Here's the honest difference.</p>
+    <div class="cmp2">
+      <div class="cmpcol"><h4>The big public resolvers</h4><p>They run on global <b>anycast</b> networks — hundreds of locations worldwide, so a server is always physically close to you. That reach is their real strength, and it's not something one person can replicate.</p></div>
+      <div class="cmpcol this"><h4>This one</h4><p>DNSDOH.ART is <b>one carefully-tuned server</b>. The goal was never to out-scale them — it was to make a single node that's genuinely <b>stable and reliable</b>, with <b>zero tolerance for DDoS and abuse</b>: strict rate-limiting, a hardened firewall, and an engine that stays fast under pressure. And unlike a big company, every line of how it works is open to read.</p></div>
     </div>
   </section>
 
-  <!-- HONEST COMPARISON -->
-  <section id="compare">
-    <div class="wrap">
-      <div class="sec-head">
-        <span class="tag">Being honest</span>
-        <h2>How this compares to the big resolvers</h2>
-        <p>Cloudflare's 1.1.1.1 and Quad9 are the public resolvers most people know. They're genuinely excellent — and I'm not pretending to match them. Here's the honest difference.</p>
-        <div class="rule"></div>
-      </div>
-      <div class="compare">
-        <div class="cmp">
-          <div class="cmp-h"><svg width="19" height="19" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><path d="M12 2a14.5 14.5 0 0 0 0 20 14.5 14.5 0 0 0 0-20"/><path d="M2 12h20"/></svg> The big public resolvers</div>
-          <p>They run on global <b>anycast</b> networks — hundreds of locations worldwide, so a server is always physically close to you. That reach is their real strength, and it's not something one person can replicate.</p>
-        </div>
-        <div class="cmp accent">
-          <div class="cmp-h"><svg width="19" height="19" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 13c0 5-3.5 7.5-7.66 8.95a1 1 0 0 1-.67-.01C7.5 20.5 4 18 4 13V6a1 1 0 0 1 1-1c2 0 4.5-1.2 6.24-2.72a1.17 1.17 0 0 1 1.52 0C14.51 3.81 17 5 19 5a1 1 0 0 1 1 1z"/></svg> This one</div>
-          <p>DNSDOH.ART is <b>one carefully-tuned server</b>. The goal was never to out-scale them — it was to make a single node that's genuinely <b>stable and reliable</b>, with <b>zero tolerance for DDoS and abuse</b>: strict rate-limiting, a hardened firewall, and an engine that stays fast under pressure. And unlike a big company, every line of how it works is open to read.</p>
-        </div>
-      </div>
+  <!-- §7 -->
+  <section id="s7">
+    <div class="eyebrow">How I work</div>
+    <div class="sec-h"><span class="sec-n">§7</span><h2>The way I build things</h2></div>
+    <div class="pr">
+      <div class="pr-i"><h4><span class="ix">7.1</span>Verify on real CPUs</h4><p>Every speed claim is measured on real production hardware with proper tools — never guessed, never tested on a laptop.</p></div>
+      <div class="pr-i"><h4><span class="ix">7.2</span>Honest about results</h4><p>When an idea doesn't actually help, I write that down too. The wins and the dead-ends are both documented in the open.</p></div>
+      <div class="pr-i"><h4><span class="ix">7.3</span>Privacy first</h4><p>Anything that could leak what you do is removed by default. No telemetry, no tracking, nothing kept on disk.</p></div>
+      <div class="pr-i"><h4><span class="ix">7.4</span>Always reversible</h4><p>Every change can be switched off in one step. If something ever acts up in production, it's undone instantly — no drama.</p></div>
     </div>
   </section>
 
-  <!-- PRINCIPLES -->
-  <section id="principles">
-    <div class="wrap">
-      <div class="sec-head">
-        <span class="tag">How I work</span>
-        <h2>The way I build things</h2>
-        <div class="rule"></div>
-      </div>
-      <div class="principles">
-        <div class="pr">
-          <div class="pi"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 3v16a2 2 0 0 0 2 2h16"/><path d="m19 9-5 5-4-4-3 3"/></svg></div>
-          <div><h4>Verify on real CPUs</h4><p>Every speed claim is measured on real production hardware with proper tools — never guessed, never tested on a laptop.</p></div>
-        </div>
-        <div class="pr">
-          <div class="pi"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/><path d="m9 12 2 2 4-4"/></svg></div>
-          <div><h4>Honest about results</h4><p>When an idea doesn't actually help, I write that down too. The wins and the dead-ends are both documented in the open.</p></div>
-        </div>
-        <div class="pr">
-          <div class="pi"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 13c0 5-3.5 7.5-7.66 8.95a1 1 0 0 1-.67-.01C7.5 20.5 4 18 4 13V6a1 1 0 0 1 1-1c2 0 4.5-1.2 6.24-2.72a1.17 1.17 0 0 1 1.52 0C14.51 3.81 17 5 19 5a1 1 0 0 1 1 1z"/></svg></div>
-          <div><h4>Privacy first</h4><p>Anything that could leak what you do is removed by default. No telemetry, no tracking, nothing kept on disk.</p></div>
-        </div>
-        <div class="pr">
-          <div class="pi"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 12a9 9 0 1 0 9-9 9.75 9.75 0 0 0-6.74 2.74L3 8"/><path d="M3 3v5h5"/></svg></div>
-          <div><h4>Always reversible</h4><p>Every change can be switched off in one step. If something ever acts up in production, it's undone instantly — no drama.</p></div>
-        </div>
-      </div>
-    </div>
-  </section>
-</main>
-
-<footer>
-  <div class="wrap">
-    <div class="foot">
-      <div class="foot-l">
-        <span class="logo" style="width:30px;height:30px;display:grid;place-items:center;border:1px solid rgba(34,211,238,.3);border-radius:8px;background:rgba(34,211,238,.08);color:var(--cyan)">
-          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 13c0 5-3.5 7.5-7.66 8.95a1 1 0 0 1-.67-.01C7.5 20.5 4 18 4 13V6a1 1 0 0 1 1-1c2 0 4.5-1.2 6.24-2.72a1.17 1.17 0 0 1 1.52 0C14.51 3.81 17 5 19 5a1 1 0 0 1 1 1z"/><path d="m9 12 2 2 4-4"/></svg>
-        </span>
-        Ozy-666
-      </div>
-      <div class="foot-links">
-        <a href="https://dnsdoh.art/">
-          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><path d="M2 12h20"/><path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"/></svg>
-          DNSDOH.ART
-        </a>
-        <a href="https://github.com/Ozy-666" rel="me">
-          <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor"><path d="M12 .5C5.7.5.5 5.7.5 12c0 5.1 3.3 9.4 7.9 10.9.6.1.8-.2.8-.5v-2c-3.2.7-3.9-1.4-3.9-1.4-.5-1.3-1.3-1.7-1.3-1.7-1-.7.1-.7.1-.7 1.2.1 1.8 1.2 1.8 1.2 1 1.8 2.8 1.3 3.5 1 .1-.8.4-1.3.7-1.6-2.6-.3-5.3-1.3-5.3-5.7 0-1.3.5-2.3 1.2-3.1-.1-.3-.5-1.5.1-3.1 0 0 1-.3 3.3 1.2a11.5 11.5 0 0 1 6 0C17.3 4.7 18.3 5 18.3 5c.6 1.6.2 2.8.1 3.1.8.8 1.2 1.8 1.2 3.1 0 4.4-2.7 5.4-5.3 5.7.4.4.8 1.1.8 2.2v3.3c0 .3.2.6.8.5 4.6-1.5 7.9-5.8 7.9-10.9C23.5 5.7 18.3.5 12 .5z"/></svg>
-          GitHub
-        </a>
-      </div>
+  <footer>
+    <div class="foot-id">Ozy-666</div>
+    <div class="foot-links">
+      <a href="https://dnsdoh.art/">DNSDOH.ART</a>
+      <a href="https://github.com/Ozy-666" rel="me">GitHub</a>
     </div>
     <div class="foot-note">
-      Built by Ozy-666 · open-source: <a href="https://github.com/Ozy-666/AdGuardHome-edge-spec">AdGuardHome-edge</a> ·
-      <a href="https://github.com/Ozy-666/dnsproxy">dnsproxy</a> ·
-      <a href="https://github.com/Ozy-666/dnscrypt-proxy">dnscrypt-proxy</a> ·
-      <a href="https://github.com/Ozy-666/urlfilter">urlfilter</a><br>
-      A hobby project — a public, no-logs DNS resolver for everyone, running at <a href="https://dnsdoh.art/">dnsdoh.art</a>. No company, no telemetry, no logs.
+      Built by Ozy-666 · open-source: <a href="https://github.com/Ozy-666/AdGuardHome-edge-spec">AdGuardHome-edge</a> · <a href="https://github.com/Ozy-666/dnsproxy">dnsproxy</a> · <a href="https://github.com/Ozy-666/dnscrypt-proxy">dnscrypt-proxy</a> · <a href="https://github.com/Ozy-666/urlfilter">urlfilter</a><br>
+      A personal project — a public, no-logs DNS resolver for everyone, running at <a href="https://dnsdoh.art/">dnsdoh.art</a>. No company, no telemetry, no logs.
     </div>
-  </div>
-</footer>
+  </footer>
 
+</div>
 </body>
 </html>
