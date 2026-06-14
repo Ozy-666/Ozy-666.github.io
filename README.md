@@ -18,7 +18,7 @@
 
 It works on phones, computers, and routers — usually just **one setting**, no technical knowledge needed.
 
-**→ [Get started in a minute](https://dnsdoh.art/setup.html)**
+**→ [Set it up on your device](https://dnsdoh.art/setup.html)**
 
 ---
 
