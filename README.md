@@ -46,4 +46,4 @@ You don't need any of this to use the service — but it's all open-source. I re
 
 ---
 
-<sub>Free, private internet for everyone — running in production at <a href="https://dnsdoh.art/">dnsdoh.art</a>. No telemetry, no logs.</sub>
+<sub>A public, no-logs DNS resolver for everyone — running at <a href="https://dnsdoh.art/">dnsdoh.art</a>. No telemetry, no logs.</sub>
