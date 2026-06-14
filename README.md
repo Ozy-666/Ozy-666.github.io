@@ -1,20 +1,20 @@
 # Hi, I'm Ozy-666 👋
 
-**A hobby project — I run a free, private DNS resolver and give it to anyone who wants it. Not a product, not a business.**
+**A hobby project — I run a public, no-logs DNS resolver and give it to anyone who wants it. Not a product, not a business.**
 
-🛡️ **[DNSDOH.ART](https://dnsdoh.art/)** — my free, no-logs DNS resolver that blocks ads & trackers and keeps your browsing private
+🛡️ **[DNSDOH.ART](https://dnsdoh.art/)** — my public, no-logs DNS resolver that blocks ads & trackers and keeps your browsing private
 🌐 **[ozy-666.github.io](https://ozy-666.github.io/)** — my homepage
 
 ---
 
 ## What it is
 
-**[DNSDOH.ART](https://dnsdoh.art/)** is a free, encrypted DNS resolver I run as a hobby. In plain words, it does the "phone book" lookup your device makes every time you open a website — but it does it **privately and cleanly**:
+**[DNSDOH.ART](https://dnsdoh.art/)** is a public, encrypted DNS resolver I run as a hobby. In plain words, it does the "phone book" lookup your device makes every time you open a website — but it does it **privately and cleanly**:
 
 - 🚫 **Blocks ads & trackers** — in every app, not just your browser
 - 🔒 **Keeps you private** — your internet provider can't see which sites you visit
 - ⚡ **Often makes pages faster** — less junk to load
-- 🆓 **Free, no app, no logs** — nothing about you is ever recorded
+- 💸 **No cost, no app, no logs** — nothing about you is ever recorded
 
 It works on phones, computers, and routers — usually just **one setting**, no technical knowledge needed.
 
