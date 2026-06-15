@@ -172,8 +172,8 @@
   .cmpcol:first-child{border-right:1px solid var(--rule2)}
   @media(max-width:640px){.cmpcol:first-child{border-right:none;border-bottom:1px solid var(--rule2)}}
   .cmpcol.this{background:var(--panel)}
-  .cmpcol h4{font-size:11px;letter-spacing:.14em;text-transform:uppercase;margin-bottom:11px;color:var(--faded)}
-  .cmpcol.this h4{color:var(--accent)}
+  .cmpcol h3{font-size:11px;letter-spacing:.14em;text-transform:uppercase;margin-bottom:11px;color:var(--faded)}
+  .cmpcol.this h3{color:var(--accent)}
   .cmpcol p{font-size:12.5px;color:var(--ink2);line-height:1.72}
   .cmpcol p b{color:var(--ink)}
 
@@ -183,8 +183,8 @@
   .pr-i{border-bottom:1px solid var(--rule2);padding:18px 20px}
   .pr-i:nth-child(odd){border-right:1px solid var(--rule2)}
   @media(max-width:640px){.pr-i:nth-child(odd){border-right:none}}
-  .pr-i h4{font-size:12.5px;font-weight:700;margin-bottom:6px}
-  .pr-i h4 .ix{color:var(--accent);margin-right:8px}
+  .pr-i h3{font-size:12.5px;font-weight:700;margin-bottom:6px}
+  .pr-i h3 .ix{color:var(--accent);margin-right:8px}
   .pr-i p{font-size:12px;color:var(--ink2);line-height:1.66}
 
   /* footer */
@@ -319,8 +319,8 @@
     <div class="sec-h"><span class="sec-n">§6</span><h2>How this compares to the big resolvers</h2></div>
     <p class="sec-lead">Cloudflare's 1.1.1.1 and Quad9 are the public resolvers most people know. They're genuinely excellent — and I'm not pretending to match them. Here's the honest difference.</p>
     <div class="cmp2">
-      <div class="cmpcol"><h4>The big public resolvers</h4><p>They run on global <b>anycast</b> networks — hundreds of locations worldwide, so a server is always physically close to you. That reach is their real strength, and it's not something one person can replicate.</p></div>
-      <div class="cmpcol this"><h4>This one</h4><p>DNSDOH.ART is <b>one carefully-tuned server</b>. The goal was never to out-scale them — it was to make a single node that's genuinely <b>stable and reliable</b>, with <b>zero tolerance for DDoS and abuse</b>: strict rate-limiting, a hardened firewall, and an engine that stays fast under pressure. And unlike a big company, every line of how it works is open to read.</p></div>
+      <div class="cmpcol"><h3>The big public resolvers</h3><p>They run on global <b>anycast</b> networks — hundreds of locations worldwide, so a server is always physically close to you. That reach is their real strength, and it's not something one person can replicate.</p></div>
+      <div class="cmpcol this"><h3>This one</h3><p>DNSDOH.ART is <b>one carefully-tuned server</b>. The goal was never to out-scale them — it was to make a single node that's genuinely <b>stable and reliable</b>, with <b>zero tolerance for DDoS and abuse</b>: strict rate-limiting, a hardened firewall, and an engine that stays fast under pressure. And unlike a big company, every line of how it works is open to read.</p></div>
     </div>
   </section>
 
@@ -329,10 +329,10 @@
     <div class="eyebrow">How I work</div>
     <div class="sec-h"><span class="sec-n">§7</span><h2>The way I build things</h2></div>
     <div class="pr">
-      <div class="pr-i"><h4><span class="ix">7.1</span>Verify on real CPUs</h4><p>Every speed claim is measured on real production hardware with proper tools — never guessed, never tested on a laptop.</p></div>
-      <div class="pr-i"><h4><span class="ix">7.2</span>Honest about results</h4><p>When an idea doesn't actually help, I write that down too. The wins and the dead-ends are both documented in the open.</p></div>
-      <div class="pr-i"><h4><span class="ix">7.3</span>Privacy first</h4><p>Anything that could leak what you do is removed by default. No telemetry, no tracking, nothing kept on disk.</p></div>
-      <div class="pr-i"><h4><span class="ix">7.4</span>Always reversible</h4><p>Every change can be switched off in one step. If something ever acts up in production, it's undone instantly — no drama.</p></div>
+      <div class="pr-i"><h3><span class="ix">7.1</span>Verify on real CPUs</h3><p>Every speed claim is measured on real production hardware with proper tools — never guessed, never tested on a laptop.</p></div>
+      <div class="pr-i"><h3><span class="ix">7.2</span>Honest about results</h3><p>When an idea doesn't actually help, I write that down too. The wins and the dead-ends are both documented in the open.</p></div>
+      <div class="pr-i"><h3><span class="ix">7.3</span>Privacy first</h3><p>Anything that could leak what you do is removed by default. No telemetry, no tracking, nothing kept on disk.</p></div>
+      <div class="pr-i"><h3><span class="ix">7.4</span>Always reversible</h3><p>Every change can be switched off in one step. If something ever acts up in production, it's undone instantly — no drama.</p></div>
     </div>
   </section>
 
