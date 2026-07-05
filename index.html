@@ -41,7 +41,7 @@
       "url": "https://ozy-666.github.io/",
       "jobTitle": "DNS Infrastructure & Performance Engineer",
       "description": "Systems engineer building high-performance, privacy-first encrypted DNS. Author of AdGuardHome-edge, the resolver engine powering DNSDOH.ART.",
-      "knowsAbout": ["DNS", "DNSSEC", "DNS-over-HTTPS", "DNS-over-TLS", "DNS-over-QUIC", "Go performance engineering", "Unbound", "BoringSSL", "dnscrypt-proxy", "network privacy"],
+      "knowsAbout": ["DNS", "DNSSEC", "DNS-over-HTTPS", "DNS-over-TLS", "DNS-over-QUIC", "Encrypted ClientHello (ECH)", "post-quantum TLS", "Discovery of Designated Resolvers (DDR)", "DANE", "Go performance engineering", "Unbound", "BoringSSL", "dnscrypt-proxy", "network privacy"],
       "sameAs": ["https://github.com/Ozy-666", "https://ozy-666.github.io"],
       "worksFor": { "@id": "https://dnsdoh.art/#organization" }
     },
@@ -202,7 +202,7 @@
   <header class="mast">
     <div class="row">
       <div class="id">Ozy-666</div>
-      <div class="meta">DNS Infrastructure · Independent<br>Public specification — rev. 2026.06</div>
+      <div class="meta">DNS Infrastructure · Independent<br>Public specification — rev. 2026.07</div>
     </div>
   </header>
   <div class="subrule"></div>
@@ -238,20 +238,8 @@
 
   <!-- §2 -->
   <section id="s2">
-    <div class="eyebrow">Built to be reliable</div>
-    <div class="sec-h"><span class="sec-n">§2</span><h2>Measurements — small, but steady under load</h2></div>
-    <p class="sec-lead">It runs on a single, carefully-tuned server — and stays steady even under heavy traffic, while keeping CPU and memory use low. The numbers below come from synthetic stress testing, well past everyday use.</p>
-    <table class="meas">
-      <tr><td class="lbl">Lookups per second</td><td class="val">8,000</td><td class="note2">sustained · ≈600× normal load</td></tr>
-      <tr><td class="lbl">Answered correctly</td><td class="val">100%</td><td class="note2">zero dropped under that load</td></tr>
-      <tr><td class="lbl">Logs kept</td><td class="val">0</td><td class="note2">memory-only, nothing saved</td></tr>
-    </table>
-  </section>
-
-  <!-- §3 -->
-  <section id="s3">
     <div class="eyebrow">The resolver</div>
-    <div class="sec-h"><span class="sec-n">§3</span><h2>DNSDOH.ART</h2></div>
+    <div class="sec-h"><span class="sec-n">§2</span><h2>DNSDOH.ART</h2></div>
     <p class="sec-lead">This is the resolver itself: public, no-logs, and open-source. It works with every modern connection type, and you don't need any technical knowledge to point your device at it.</p>
     <table class="meas">
       <tr><td class="lbl">Cost</td><td class="val">None</td><td class="note2">no account · no app needed</td></tr>
@@ -261,38 +249,38 @@
     <div class="links" style="margin-top:22px"><a class="lnk pri" href="https://dnsdoh.art/">Visit DNSDOH.ART →</a></div>
   </section>
 
-  <!-- §4 -->
-  <section id="s4">
+  <!-- §3 -->
+  <section id="s3">
     <div class="eyebrow">Under the hood</div>
-    <div class="sec-h"><span class="sec-n">§4</span><h2>The engine — I built it too</h2></div>
+    <div class="sec-h"><span class="sec-n">§3</span><h2>The engine — I built it too</h2></div>
     <p class="sec-lead">You don't need to read any of this to use the service — but if you're technical, here's the open-source work behind it. I rewrote the core DNS software to be faster and leaner, and every change is proven with real benchmarks (not guesses) before it ships.</p>
     <div class="spec">
       <div class="entry">
-        <div class="entry-h"><div class="entry-n"><span class="ix">4.1</span>AdGuardHome-edge</div><div class="entry-m">24.6 MB · −10 MB bloat</div></div>
+        <div class="entry-h"><div class="entry-n"><span class="ix">3.1</span>AdGuardHome-edge</div><div class="entry-m">24.6 MB · −10 MB bloat</div></div>
         <p class="entry-b">The brain of the service. I stripped ~13k lines of anything that leaks data or wastes time (DHCP, cloud lookups, client-subnet), rebuilt the request pipeline to allocate nothing, and made the hot paths lock-free so it holds up under flood. A built-in front cache means most repeat lookups never travel further than this box.</p>
         <div class="entry-t">0-alloc pipeline · lock-free serve path · front-cache +60% · −13k LOC</div>
         <a class="entry-r" href="https://github.com/Ozy-666/AdGuardHome-edge-spec">github.com/Ozy-666/AdGuardHome-edge-spec →</a>
       </div>
       <div class="entry">
-        <div class="entry-h"><div class="entry-n"><span class="ix">4.2</span>dnsproxy</div><div class="entry-m">+101% throughput</div></div>
+        <div class="entry-h"><div class="entry-n"><span class="ix">3.2</span>dnsproxy</div><div class="entry-m">+101% throughput</div></div>
         <p class="entry-b">How requests travel in and out. I rebuilt the UDP and TCP paths to allocate nothing, made upstream timing lock-free, and pooled connections instead of reopening one per query — then spread the listener across every CPU core. It also caps QUIC streams and DoH request sizes so a single client can't exhaust it.</p>
         <div class="entry-t">0 allocs/op · lock-free RTT map · SO_REUSEPORT · flood caps</div>
         <a class="entry-r" href="https://github.com/Ozy-666/dnsproxy">github.com/Ozy-666/dnsproxy →</a>
       </div>
       <div class="entry">
-        <div class="entry-h"><div class="entry-n"><span class="ix">4.3</span>dnscrypt-proxy</div><div class="entry-m">0 vulnerabilities</div></div>
+        <div class="entry-h"><div class="entry-n"><span class="ix">3.3</span>dnscrypt-proxy</div><div class="entry-m">0 vulnerabilities</div></div>
         <p class="entry-b">The part that encrypts your DNS on its way out to the wider internet. I rebuilt its busy paths to allocate nothing, made server-selection lock-free, and stripped everything that phones home — the web UI, auto-updates, and remote list downloads. Then had it security-audited; it now rejects forged upstream replies too.</p>
         <div class="entry-t">0 allocs/op · lock-free WP2 · −455 KB · audited</div>
         <a class="entry-r" href="https://github.com/Ozy-666/dnscrypt-proxy">github.com/Ozy-666/dnscrypt-proxy →</a>
       </div>
       <div class="entry">
-        <div class="entry-h"><div class="entry-n"><span class="ix">4.4</span>urlfilter</div><div class="entry-m">248× faster</div></div>
+        <div class="entry-h"><div class="entry-n"><span class="ix">3.4</span>urlfilter</div><div class="entry-m">248× faster</div></div>
         <p class="entry-b">The list-matcher that decides what's an ad or tracker. I changed how it indexes its trickiest rules (regular expressions) so they're found instantly instead of scanned one by one — closing a path attackers could use to slow it down with floods of fake subdomains. The lookup allocates nothing, and I verified the rebuilt engine returns identical results to the original across 39,983 real domains plus 130,000 fuzz runs.</p>
         <div class="entry-t">O(1) regex matching · 0 allocs · 0 divergences verified</div>
         <a class="entry-r" href="https://github.com/Ozy-666/urlfilter">github.com/Ozy-666/urlfilter →</a>
       </div>
       <div class="entry">
-        <div class="entry-h"><div class="entry-n"><span class="ix">4.5</span>Unbound + BoringSSL</div><div class="entry-m">−26% latency · +9.6%</div></div>
+        <div class="entry-h"><div class="entry-n"><span class="ix">3.5</span>Unbound + BoringSSL</div><div class="entry-m">−26% latency · +9.6%</div></div>
         <p class="entry-b">The resolver that finds each address and proves it's genuine. Checking those security signatures was eating nearly half the server's effort, so I rebuilt Unbound on Google's faster, formally-verified math library (BoringSSL) — keeping a one-command undo ready in case anything misbehaved.</p>
         <div class="entry-t">Statically-linked BoringSSL · full DNSSEC validation</div>
         <a class="entry-r" href="https://github.com/Ozy-666/AdGuardHome-edge-spec#66-cryptographic-substrate--unbound-on-boringssl">AdGuardHome-edge-spec · §6.6 Unbound×BoringSSL →</a>
@@ -300,10 +288,10 @@
     </div>
   </section>
 
-  <!-- §5 -->
-  <section id="s5">
+  <!-- §4 -->
+  <section id="s4">
     <div class="eyebrow">The journey of a request</div>
-    <div class="sec-h"><span class="sec-n">§5</span><h2>Encrypted from start to finish</h2></div>
+    <div class="sec-h"><span class="sec-n">§4</span><h2>Encrypted from start to finish</h2></div>
     <p class="sec-lead">When you look up a website, your request stays protected the whole way — each step has one job, and your data never travels in the open.</p>
     <div class="path">
       <div class="step"><div class="sn">Your device</div><div class="sd">asks privately</div></div>
@@ -311,6 +299,48 @@
       <div class="step"><div class="si">→</div><div class="sn">Filter</div><div class="sd">blocks the junk</div></div>
       <div class="step"><div class="si">→</div><div class="sn">Verify</div><div class="sd">checks it's genuine</div></div>
       <div class="step"><div class="si">→</div><div class="sn">Encrypt out</div><div class="sd">private to the web</div></div>
+    </div>
+  </section>
+
+  <!-- §5 -->
+  <section id="s5">
+    <div class="eyebrow">Shipped in 2026</div>
+    <div class="sec-h"><span class="sec-n">§5</span><h2>Protections most resolvers don't have yet</h2></div>
+    <p class="sec-lead">The service keeps moving. These went live in 2026 — each one is verifiable from the outside, and each links to a plain-language guide if you want the details.</p>
+    <div class="spec">
+      <div class="entry">
+        <div class="entry-h"><div class="entry-n"><span class="ix">5.1</span>Post-quantum encryption</div><div class="entry-m">live · all 4 transports</div></div>
+        <p class="entry-b">Every connection now negotiates a hybrid key exchange (X25519MLKEM768) that stays secure even against future quantum computers. Traffic recorded today can't be stored and decrypted later.</p>
+        <div class="entry-t">X25519MLKEM768 · DoH · DoT · DoQ · HTTP/3</div>
+        <a class="entry-r" href="https://dnsdoh.art/guides/post-quantum-key-exchange-explained.html">Guide: post-quantum key exchange, explained →</a><br>
+        <a class="entry-r" href="https://dnsdoh.art/news/post-quantum-and-ech-live.html">Announcement →</a>
+      </div>
+      <div class="entry">
+        <div class="entry-h"><div class="entry-n"><span class="ix">5.2</span>Encrypted Client Hello (ECH)</div><div class="entry-m">live</div></div>
+        <p class="entry-b">Normally the very first packet of a secure connection still reveals the name of the site you're contacting. ECH encrypts that last plaintext field — so even connecting to the resolver itself gives nothing away to whoever is watching the wire.</p>
+        <div class="entry-t">ECH keys published in DNS · BoringSSL build</div>
+        <a class="entry-r" href="https://dnsdoh.art/guides/encrypted-client-hello-ech-explained.html">Guide: what ECH hides, and from whom →</a>
+      </div>
+      <div class="entry">
+        <div class="entry-h"><div class="entry-n"><span class="ix">5.3</span>Automatic discovery (DDR)</div><div class="entry-m">verified · RFC 9462</div></div>
+        <p class="entry-b">Modern phones and computers can now find the encrypted endpoints on their own: point your device at the plain address, and the operating system discovers DoH, DoT and DoQ and upgrades to them automatically — checked against the server's certificate, so it can't be spoofed.</p>
+        <div class="entry-t">_dns.resolver.arpa · verified designation</div>
+        <a class="entry-r" href="https://dnsdoh.art/guides/how-devices-discover-encrypted-dns.html">Guide: how devices discover encrypted DNS →</a><br>
+        <a class="entry-r" href="https://dnsdoh.art/news/verified-ddr-automatic-discovery.html">Announcement →</a>
+      </div>
+      <div class="entry">
+        <div class="entry-h"><div class="entry-n"><span class="ix">5.4</span>Signed &amp; pinned — DNSSEC + DANE</div><div class="entry-m">signed · pinned</div></div>
+        <p class="entry-b">The zone is cryptographically signed (ECDSA P-256), and every transport publishes DANE pins in DNS. Your device can prove it's talking to the genuine server — not an impostor on a hostile network.</p>
+        <div class="entry-t">DNSSEC ECDSA P-256 · TLSA pins on all 4 transports</div>
+        <a class="entry-r" href="https://dnsdoh.art/guides/what-is-dnssec.html">Guide: what DNSSEC actually proves →</a>
+      </div>
+    </div>
+    <div class="note">
+      <p><b>Want to go deeper?</b> I write plain-language guides on DNS and privacy — how leaks happen, what your ISP sees, whether a VPN helps — and post updates as they ship.</p>
+      <div class="links" style="margin-top:0">
+        <a class="lnk" href="https://dnsdoh.art/guides.html">All guides →</a>
+        <a class="lnk" href="https://dnsdoh.art/news.html">News →</a>
+      </div>
     </div>
   </section>
 
@@ -341,6 +371,8 @@
     <div class="foot-id">Ozy-666</div>
     <div class="foot-links">
       <a href="https://dnsdoh.art/">DNSDOH.ART</a>
+      <a href="https://dnsdoh.art/guides.html">Guides</a>
+      <a href="https://dnsdoh.art/news.html">News</a>
       <a href="https://github.com/Ozy-666" rel="me">GitHub</a>
     </div>
     <div class="foot-note">
