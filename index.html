@@ -301,8 +301,10 @@
       <div class="entry-h"><div class="entry-n"><span class="ix">2.6</span>nginx + BoringSSL</div><div class="entry-m">post-quantum · ECH</div></div>
       <p class="entry-b">The front door, answering every encrypted request before anything else sees it. Building on BoringSSL buys three things a stock build cannot do. The name of the site you asked for is encrypted too, with Encrypted Client Hello, instead of travelling in the clear. Traffic recorded today can't be unlocked by a future quantum computer, because the key exchange is already post-quantum. And it speaks HTTP/3, so pages start a round trip sooner.</p>
       <p class="entry-b">nginx implements ECH only against the OpenSSL 3.x API, so the repo carries one patch adding the BoringSSL path. The build verifies the PGP signature on every download before it compiles anything, and refuses to proceed on an unpinned signing key.</p>
+      <p class="entry-b">A DoH3 handshake here started failing about one attempt in twenty, and it was not my build. When the server's ServerHello spans two Initial packets and one of them is lost, nginx never retransmits it: the handshake deadlocks until the client gives up, and nothing is logged. I traced it to the congestion controller rather than the retransmission logic and reported it with a reproduction. nginx opened a fix crediting the report - still open, not merged. Rebuilding their candidate here cleared the case I reported, and showed the deadlock returns once the certificate chain is large enough to fill QUIC's initial congestion window, which post-quantum certificates are big enough to do.</p>
       <div class="entry-t">X25519MLKEM768 · Encrypted Client Hello · HTTP/3 + Brotli · PGP-verified builds</div>
       <a class="entry-r" href="https://github.com/Ozy-666/nginx-edge">github.com/Ozy-666/nginx-edge →</a>
+      <a class="entry-r" href="https://github.com/nginx/nginx/issues/1616" style="margin-left:14px">nginx/nginx#1616 →</a>
     </div>
 
     <div class="entry">
