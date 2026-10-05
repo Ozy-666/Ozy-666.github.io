@@ -6,7 +6,7 @@
 
 <title>Ozy-666 - DNS infrastructure engineering, measured</title>
 <meta name="description" content="I build and run DNSDOH.ART, a public encrypted DNS resolver. Every component in the request path is rebuilt from source, and every performance number here is measured on the production host.">
-<meta name="keywords" content="Ozy-666, encrypted DNS, private DNS, no-logs DNS, ad-blocking DNS, DNS over HTTPS, DoH, DoT, DoQ, public DNS resolver, AdGuardHome-edge, DNSDOH.ART">
+<meta name="keywords" content="Ozy-666, encrypted DNS, private DNS, no-logs DNS, ad-blocking DNS, DNS over HTTPS, DoH, DoT, DoQ, public DNS resolver, dnsdist, Unbound, DNSDOH.ART">
 <meta name="author" content="Ozy-666">
 <meta name="robots" content="index, follow">
 <link rel="canonical" href="https://ozy-666.github.io/">
@@ -40,8 +40,8 @@
       "name": "Ozy-666",
       "url": "https://ozy-666.github.io/",
       "jobTitle": "DNS Infrastructure & Performance Engineer",
-      "description": "Systems engineer building high-performance, privacy-first encrypted DNS. Author of AdGuardHome-edge, the resolver engine powering DNSDOH.ART.",
-      "knowsAbout": ["DNS", "DNSSEC", "DNS-over-HTTPS", "DNS-over-TLS", "DNS-over-QUIC", "Encrypted ClientHello (ECH)", "post-quantum TLS", "Discovery of Designated Resolvers (DDR)", "DANE", "Go performance engineering", "Unbound", "BoringSSL", "dnscrypt-proxy", "network privacy"],
+      "description": "Systems engineer building high-performance, privacy-first encrypted DNS. Builds and runs DNSDOH.ART on nginx, dnsdist and Unbound.",
+      "knowsAbout": ["DNS", "DNSSEC", "DNS-over-HTTPS", "DNS-over-TLS", "DNS-over-QUIC", "Encrypted ClientHello (ECH)", "post-quantum TLS", "Discovery of Designated Resolvers (DDR)", "DANE", "Go performance engineering", "Unbound", "BoringSSL", "dnsdist", "network privacy"],
       "sameAs": ["https://github.com/Ozy-666", "https://ozy-666.github.io"],
       "worksFor": { "@id": "https://dnsdoh.art/#organization" }
     },
@@ -51,16 +51,6 @@
       "name": "DNSDOH.ART",
       "url": "https://dnsdoh.art/",
       "founder": { "@id": "https://ozy-666.github.io/#person" }
-    },
-    {
-      "@type": "SoftwareSourceCode",
-      "name": "AdGuardHome-edge",
-      "description": "A custom, performance-engineered fork of AdGuard Home: an open-source, zero-telemetry, privacy-first encrypted DNS resolver with zero-allocation hot paths and a BoringSSL cryptographic substrate.",
-      "codeRepository": "https://github.com/Ozy-666/AdGuardHome-edge-spec",
-      "programmingLanguage": "Go",
-      "runtimePlatform": "Linux",
-      "author": { "@id": "https://ozy-666.github.io/#person" },
-      "about": { "@id": "https://dnsdoh.art/#organization" }
     },
     {
       "@type": "SoftwareSourceCode",
@@ -214,6 +204,7 @@
   .foot-links{display:flex;gap:18px;font-size:12px;margin-bottom:18px;flex-wrap:wrap}
   .foot-note{font-size:11.5px;color:var(--faded);line-height:1.7;max-width:74ch}
   .foot-note a{color:var(--ink2)}
+  .entry-rs{display:flex;flex-wrap:wrap;gap:2px 16px}
 </style>
 </head>
 <body>
@@ -222,7 +213,7 @@
   <header class="mast">
     <div class="row">
       <div class="id">Ozy-666</div>
-      <div class="meta">DNS Infrastructure · Independent<br>Engineering notes - rev. 2026.08</div>
+      <div class="meta">DNS Infrastructure · Independent<br>Engineering notes - rev. 2026.10</div>
     </div>
   </header>
 
@@ -246,7 +237,7 @@
       <tr><td class="lbl">Cost</td><td class="val">None</td><td class="note2">no account · no app needed</td></tr>
       <tr><td class="lbl">Logs kept</td><td class="val">0</td><td class="note2">nothing recorded, ever</td></tr>
       <tr><td class="lbl">Transports</td><td class="val">DoH · DoT · DoQ · H3</td><td class="note2">phone · laptop · router</td></tr>
-      <tr><td class="lbl">Source</td><td class="val">All of it</td><td class="note2">every fork is public</td></tr>
+      <tr><td class="lbl">Software</td><td class="val">Upstream</td><td class="note2">nginx · dnsdist · Unbound, no forks</td></tr>
     </table>
 
     <div class="note">
@@ -261,56 +252,45 @@
     <p class="sec-lead">Every number below was measured on the production host. Where a claim has a verification method, it's stated - a number without one is just a number.</p>
 
     <div class="entry">
-      <div class="entry-h"><div class="entry-n"><span class="ix">2.1</span>AdGuardHome-edge</div><div class="entry-m">−13k LOC · −10 MB</div></div>
-      <p class="entry-b">The engine. I stripped ~13k lines of anything that leaks data or wastes time - DHCP, cloud lookups, client-subnet - rebuilt the request pipeline to allocate nothing on the hot path, and made the serve path lock-free so it holds up under flood. A built-in front cache means most repeat lookups never leave the box.</p>
-      <div class="entry-t">0-alloc pipeline · lock-free serve path · front-cache +60% · −13k LOC</div>
-      <a class="entry-r" href="https://github.com/Ozy-666/AdGuardHome-edge-spec">github.com/Ozy-666/AdGuardHome-edge-spec →</a>
+      <div class="entry-h"><div class="entry-n"><span class="ix">2.1</span>dnsdist</div><div class="entry-m">since 2026-09-27</div></div>
+      <p class="entry-b">The front end. dnsdist answers plain DNS on port 53 and DoT and DoQ on 853, takes DoH from nginx, and applies the ad, tracker, phishing and malware blocklists. It replaced my own AdGuard Home build: one upstream program with configuration, instead of a patched fork to rebase on every release.</p>
+      <div class="entry-t">Do53 · DoT · DoQ · DoH via nginx · blocklists</div>
     </div>
 
     <div class="entry">
-      <div class="entry-h"><div class="entry-n"><span class="ix">2.2</span>dnsproxy</div><div class="entry-m">+101% throughput</div></div>
-      <p class="entry-b">How requests travel in and out. Rebuilt the UDP and TCP paths to allocate nothing, made upstream RTT tracking lock-free, pooled connections instead of reopening one per query, and sharded the listener across every core with SO_REUSEPORT. It also caps QUIC streams and DoH request sizes so one client can't exhaust it.</p>
-      <div class="entry-t">0 allocs/op · lock-free RTT map · SO_REUSEPORT · flood caps</div>
-      <a class="entry-r" href="https://github.com/Ozy-666/dnsproxy">github.com/Ozy-666/dnsproxy →</a>
-    </div>
-
-    <div class="entry">
-      <div class="entry-h"><div class="entry-n"><span class="ix">2.3</span>dnscrypt-proxy</div><div class="entry-m">security-audited</div></div>
-      <p class="entry-b">Encrypts DNS on its way out to the wider internet. Rebuilt the busy paths to allocate nothing, made server selection lock-free, and stripped everything that phones home - the web UI, auto-updates, remote list downloads and ODoH, about 800 lines of protocol removed purely to cut attack surface. It now rejects forged upstream replies.</p>
-      <div class="entry-t">0 allocs/op · lock-free WP2 · −455 KB · ODoH stripped</div>
-      <a class="entry-r" href="https://github.com/Ozy-666/dnscrypt-proxy">github.com/Ozy-666/dnscrypt-proxy →</a>
-    </div>
-
-    <div class="entry">
-      <div class="entry-h"><div class="entry-n"><span class="ix">2.4</span>urlfilter</div><div class="entry-m">248× faster</div></div>
-      <p class="entry-b">The matcher that decides what's an ad or a tracker. I changed how it indexes regular-expression rules so they're found by literal extraction instead of scanned one by one - closing a path an attacker could use to slow the resolver with floods of fake subdomains.</p>
-      <p class="entry-b"><b>Verified:</b> identical results to the original engine across 39,983 real domains plus 130,000 fuzz runs, 0 divergences. The flood benchmark went from 111 µs to 449 ns at 1,000 regex rules, and stays flat as rules are added.</p>
-      <div class="entry-t">O(1) regex miss path · 0 query-path allocs · 0 divergences</div>
-      <a class="entry-r" href="https://github.com/Ozy-666/urlfilter">github.com/Ozy-666/urlfilter →</a>
-    </div>
-
-    <div class="entry">
-      <div class="entry-h"><div class="entry-n"><span class="ix">2.5</span>Unbound + BoringSSL</div><div class="entry-m">+14% · −27%</div></div>
-      <p class="entry-b">The part that proves an answer is genuine. Checking DNSSEC signatures was eating close to half the server's CPU, so I rebuilt Unbound against BoringSSL - keeping a one-command rollback ready, and no Unbound source patched: the customisation is entirely build flags, config and systemd units.</p>
+      <div class="entry-h"><div class="entry-n"><span class="ix">2.2</span>Unbound + BoringSSL</div><div class="entry-m">+14% · −27%</div></div>
+      <p class="entry-b">The part that proves an answer is genuine, and the only part that talks to the wider internet: it forwards over DoT to Cloudflare and Quad9. Checking DNSSEC signatures was eating close to half the server's CPU, so I rebuilt Unbound against BoringSSL - keeping a one-command rollback ready, and no Unbound source patched: the customisation is entirely build flags, config and systemd units.</p>
       <p class="entry-b"><b>+14% end-to-end DNSSEC throughput, −27% worst-case latency.</b> The mechanism is roughly 30% faster signature verification - ECDSA P-256 +28.8%, RSA-2048 +34.2% against OpenSSL 3.0.16, over 8 paired rounds with the same benchmark compiled against both libraries. DNSSEC crypto was about 44% of Unbound's CPU, so a ~30% gain on 44% of the work predicts ~13% overall; the end-to-end flood measured +14%. The benchmark ships with the repo, so a library bump can be re-checked rather than assumed.</p>
       <div class="entry-t">pinned BoringSSL · full DNSSEC validation · Zen 2 tuned · benchmark included</div>
       <a class="entry-r" href="https://github.com/Ozy-666/unbound-edge">github.com/Ozy-666/unbound-edge →</a>
     </div>
 
     <div class="entry">
-      <div class="entry-h"><div class="entry-n"><span class="ix">2.6</span>nginx + BoringSSL</div><div class="entry-m">post-quantum · ECH</div></div>
+      <div class="entry-h"><div class="entry-n"><span class="ix">2.3</span>nginx + BoringSSL</div><div class="entry-m">post-quantum · ECH</div></div>
       <p class="entry-b">The front door, answering every encrypted request before anything else sees it. Building on BoringSSL buys three things a stock build cannot do. The name of the site you asked for is encrypted too, with Encrypted Client Hello, instead of travelling in the clear. Traffic recorded today can't be unlocked by a future quantum computer, because the key exchange is already post-quantum. And it speaks HTTP/3, so pages start a round trip sooner.</p>
       <p class="entry-b">nginx implements ECH only against the OpenSSL 3.x API, so the repo carries one patch adding the BoringSSL path. The build verifies the PGP signature on every download before it compiles anything, and refuses to proceed on an unpinned signing key.</p>
-      <p class="entry-b">A DoH3 handshake here started failing about one attempt in twenty, and it was not my build. When the server's ServerHello spans two Initial packets and one of them is lost, nginx never retransmits it: the handshake deadlocks until the client gives up, and nothing is logged. I traced it to the congestion controller rather than the retransmission logic and reported it with a reproduction. nginx opened a fix crediting the report - still open, not merged. Rebuilding their candidate here cleared the case I reported, and showed the deadlock returns once the certificate chain is large enough to fill QUIC's initial congestion window, which post-quantum certificates are big enough to do.</p>
+      <p class="entry-b">A DoH3 handshake here started failing about one attempt in twenty, and it was not my build. When the server's ServerHello spans two Initial packets and one of them is lost, nginx never retransmits it: the handshake deadlocks until the client gives up, and nothing is logged. I reported it with a reproduction, and nginx engineers reproduced and diagnosed it on the thread. A fix from an outside contributor is open as nginx/nginx#1617, not merged. Rebuilt here on the same nginx base, its current version did not reduce the failure rate, with either a default or a large post-quantum-sized certificate chain.</p>
       <div class="entry-t">X25519MLKEM768 · Encrypted Client Hello · HTTP/3 + Brotli · PGP-verified builds</div>
+      <div class="entry-rs">
       <a class="entry-r" href="https://github.com/Ozy-666/nginx-edge">github.com/Ozy-666/nginx-edge →</a>
-      <a class="entry-r" href="https://github.com/nginx/nginx/issues/1616" style="margin-left:14px">nginx/nginx#1616 →</a>
+      <a class="entry-r" href="https://github.com/nginx/nginx/issues/1616">nginx/nginx#1616 →</a>
+      </div>
     </div>
 
     <div class="entry">
-      <div class="entry-h"><div class="entry-n"><span class="ix">2.7</span>Everything else</div><div class="entry-m">the unglamorous half</div></div>
+      <div class="entry-h"><div class="entry-n"><span class="ix">2.4</span>Everything else</div><div class="entry-m">the unglamorous half</div></div>
       <p class="entry-b">Redis holds the leak-test state, in memory only - no RDB, no AOF, nothing on disk. The update scripts for nginx, Unbound and Redis all verify checksums or signatures before building, test the new binary against the live config before installing it, and roll back automatically if the service doesn't answer afterwards. A watcher tracks every upstream and tells me when one moves, and only when there's something to actually do.</p>
       <div class="entry-t">verified builds · pre-install gates · automatic rollback · upstream watch</div>
+    </div>
+    <div class="entry">
+      <div class="entry-h"><div class="entry-n"><span class="ix">2.5</span>Retired forks</div><div class="entry-m">archived Oct 2026</div></div>
+      <p class="entry-b">Until October 2026 the resolver ran on my own forks of AdGuard Home, dnsproxy, urlfilter and dnscrypt-proxy: allocation-free hot paths, lock-free data structures, ~13k lines stripped. Keeping four forks rebased on every upstream release cost more than it returned, so dnsdist and Unbound took over their jobs. The repositories are archived, read-only, with the benchmarks and notes kept for reference. Nothing changed for people using the service: same addresses, blocking still on.</p>
+      <div class="entry-rs">
+      <a class="entry-r" href="https://github.com/Ozy-666/AdGuardHome-edge-spec">AdGuardHome-edge-spec →</a>
+      <a class="entry-r" href="https://github.com/Ozy-666/dnsproxy">dnsproxy →</a>
+      <a class="entry-r" href="https://github.com/Ozy-666/urlfilter">urlfilter →</a>
+      <a class="entry-r" href="https://github.com/Ozy-666/dnscrypt-proxy">dnscrypt-proxy →</a>
+      </div>
     </div>
   </section>
 
@@ -324,8 +304,8 @@
 
     <div class="pr">
       <div class="pr-i"><h3><span class="ix">3.1</span>Measured, not guessed</h3><p>Numbers come from benchmarks on the production host. When I moved BoringSSL forward, three rounds looked like a 2.6% regression - at eight rounds it reversed and turned out to be scheduler noise. Three samples can't separate a real change from a busy machine, so the tool now defaults higher and reports a win count, not one number.</p></div>
-      <div class="pr-i"><h3><span class="ix">3.2</span>Dead ends written down</h3><p>When an upstream release doesn't help, that gets recorded with the reason. urlfilter 0.23.4 was reviewed and deliberately not ported: its only functional change is a feature this fork doesn't carry, and taking it would disturb the patch that makes regex matching fast.</p></div>
-      <div class="pr-i"><h3><span class="ix">3.3</span>Privacy by removal</h3><p>The safest code is the code that isn't there. Telemetry, auto-update and remote fetches are stripped rather than disabled, because a switch can be flipped back and deleted code cannot.</p></div>
+      <div class="pr-i"><h3><span class="ix">3.2</span>Dead ends written down</h3><p>When an upstream release doesn't help, that gets recorded with the reason. urlfilter 0.23.4 was reviewed and deliberately not ported: its only functional change was a feature that fork didn't carry, and taking it would have disturbed the patch that made regex matching fast.</p></div>
+      <div class="pr-i"><h3><span class="ix">3.3</span>Fewer moving parts</h3><p>The safest code is the code that isn't there. The retired forks got there by deleting telemetry, auto-update and remote fetches; the current stack gets there by running fewer programs, each one an upstream release.</p></div>
       <div class="pr-i"><h3><span class="ix">3.4</span>Always reversible</h3><p>Every update script backs up what it replaces and restores it automatically if the new build doesn't answer. A change I can't undo in one step isn't finished.</p></div>
     </div>
   </section>
@@ -349,7 +329,7 @@
 
     <div class="cells">
       <div class="cell"><h3>Why BoringSSL instead of OpenSSL for DNS?</h3><p>For DNSSEC validation it is measurably faster on this hardware - about 30% on signature verification, which works out to +14% end-to-end throughput because crypto is roughly 44% of the resolver's CPU. It is not a free win: BoringSSL offers no stable ABI, so the library and the daemon have to be rebuilt together, and it has no PKCS#7, so some tooling stays on OpenSSL.</p></div>
-      <div class="cell"><h3>Does stripping code actually make a resolver faster?</h3><p>Sometimes, but that's not the main reason. Removing ~13k lines of AdGuard Home and ~800 lines of ODoH mostly removes attack surface and things that phone home. The measurable speed came from separate work - allocation-free hot paths, lock-free data structures and a front cache - not from the deletions themselves.</p></div>
+      <div class="cell"><h3>Does stripping code actually make a resolver faster?</h3><p>Sometimes, but that's not the main reason. In the forks I ran until October 2026, removing ~13k lines of AdGuard Home and ~800 lines of ODoH mostly removed attack surface and things that phone home. The measurable speed came from separate work - allocation-free hot paths, lock-free data structures and a front cache - not from the deletions themselves.</p></div>
       <div class="cell"><h3>How do you benchmark a DNS resolver honestly?</h3><p>Separate cache hits from cache misses and score them differently, because mixing them lets one slow authoritative lookup misrank a good resolver. Warm every domain you intend to measure, or you're timing someone else's nameservers. Run paired rounds and report a median with a win count - on a live machine, a single round's noise is larger than most differences worth caring about.</p></div>
       <div class="cell"><h3>Why one server instead of anycast?</h3><p>Because anycast isn't something one person runs well, and pretending otherwise would be the dishonest part. A single node can still be fast and very hard to abuse. Reach is the thing I can't match, so I don't claim it.</p></div>
       <div class="cell"><h3>Is any of this reusable on another host?</h3><p>The approach is; the scripts mostly aren't. They're compiled for AMD Zen 2 and will crash with an illegal instruction elsewhere, and they overwrite distribution binaries. Every repo says so in its README rather than pretending to be a drop-in installer.</p></div>
@@ -377,7 +357,7 @@
       <a href="https://github.com/Ozy-666" rel="me">GitHub</a>
     </div>
     <div class="foot-note">
-      Built by Ozy-666 · open-source: <a href="https://github.com/Ozy-666/AdGuardHome-edge-spec">AdGuardHome-edge</a> · <a href="https://github.com/Ozy-666/dnsproxy">dnsproxy</a> · <a href="https://github.com/Ozy-666/dnscrypt-proxy">dnscrypt-proxy</a> · <a href="https://github.com/Ozy-666/urlfilter">urlfilter</a> · <a href="https://github.com/Ozy-666/unbound-edge">unbound-edge</a> · <a href="https://github.com/Ozy-666/nginx-edge">nginx-edge</a> · <a href="https://github.com/Ozy-666/dns-ultra">dns-ultra</a><br>
+      Built by Ozy-666 · open-source: <a href="https://github.com/Ozy-666/unbound-edge">unbound-edge</a> · <a href="https://github.com/Ozy-666/nginx-edge">nginx-edge</a> · <a href="https://github.com/Ozy-666/dns-ultra">dns-ultra</a> · <a href="https://github.com/Ozy-666/dns-transport-bench">dns-transport-bench</a> · <a href="https://github.com/Ozy-666/dns-pow-bench">dns-pow-bench</a><br>
       A personal project - a public, no-logs DNS resolver for everyone, running at <a href="https://dnsdoh.art/">dnsdoh.art</a>. No company, no telemetry, no logs.
     </div>
   </footer>
